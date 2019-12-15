@@ -1,38 +1,38 @@
 import React, { PureComponent } from "react";
-
+import "./index.css";
 export interface IProps {
   /**
    * 自定义样式
    */
-  className: string;
+  className?: string;
   /**
    * 是否自动播放
    */
-  autoPlay: boolean;
+  autoPlay?: boolean;
   /**
    * 自动播放速度
    */
-  autoPlaySpeed: number;
+  autoPlaySpeed?: number;
   /**
    * 轮播速度
    */
-  speed: number;
+  speed?: number;
   /**
    * 是否启用懒加载
    */
-  lazyLoad: boolean;
+  lazyLoad?: boolean;
   /**
    * 是否显示箭头
    */
-  arrows: boolean;
+  arrows?: boolean;
   /**
    * 箭头大小,可选值 "small" | "medium" | "large"
    */
-  arrowSize: "small" | "medium" | "large";
+  arrowSize?: "small" | "medium" | "large";
   /**
    * 箭头位置,可选值 "inner"|"outer"
    */
-  arrowPosition: "inner" | "outer";
+  arrowPosition?: "inner" | "outer";
 }
 
 export interface IState {
@@ -41,7 +41,7 @@ export interface IState {
   slideCount: number;
 }
 
-export default class index extends PureComponent<IProps, IState> {
+export default class Slider extends PureComponent<IProps, IState> {
   constructor(props: Readonly<IProps>) {
     super(props);
   }
@@ -84,6 +84,7 @@ export default class index extends PureComponent<IProps, IState> {
   };
   handleClickRight = () => {
     const { index, slideCount } = this.state;
+    console.log(`index ${index} slideCount ${slideCount}`);
     this.setState({ index: index + 1 }, () => {
       if (index === slideCount - 1) {
         this.removeTransition();
@@ -93,10 +94,12 @@ export default class index extends PureComponent<IProps, IState> {
     });
   };
   componentDidMount() {
-    let slider = document.getElementById(".slider-wrap");
+    let slider = document.getElementById("slider-wrap");
+    console.log("slider :", slider);
     if (slider) {
       // @ts-ignore
       this.setState(() => ({ sliderWidth: slider.offsetWidth }));
+      console.log("slider.offsetWidth :", slider.offsetWidth);
     }
     let slideCount = React.Children.count(this.props.children);
     if (slideCount > 1) {
@@ -104,32 +107,52 @@ export default class index extends PureComponent<IProps, IState> {
       this.setState({ index: 1, slideCount: slideCount + 2 });
       // child 首尾添加 item
     }
-    console.log("this.sliderWidth", this.state.sliderWidth);
   }
   render() {
     const { arrowPosition, className, children } = this.props;
     const { index, slideCount, sliderWidth } = this.state;
-    const transformX = {
-      transform: `transform:translateX(-${index * sliderWidth})`
-    };
+
+    const childLength = React.Children.count(children);
+    let transformX;
+
     let sliders = React.Children.toArray(children);
     // 无 item 不显示
-    if (slideCount === 0 || !children) return null;
-    else if (slideCount === 1) {
+    if (childLength === 0 || !children) return null;
+    else if (childLength === 1) {
       // 单个 item 不显示箭头和进度栏
-    } else if (slideCount > 1) {
+    } else if (childLength > 1) {
       // 首尾添加 item 为了轮播
       sliders.unshift(sliders[0]);
       sliders.push(sliders[sliders.length - 1]);
     }
-
+    if (index) {
+      transformX = {
+        transform: `translateX(${-((index - 1) * sliderWidth)}px)`,
+        width: index * sliderWidth
+      };
+    }
     return (
-      <div id="slider-wrap" className="slider-wrap" style={transformX}>
-        {React.Children.map(sliders, child => {
-          return <div className="slider-item">{child}</div>;
-        })}
+      <>
+        <div
+          id="slider-wrap"
+          className="slider-wrap slider-transition"
+          style={transformX || {}}
+        >
+          {index &&
+            React.Children.map(sliders, (child, index) => {
+              return (
+                <div
+                  className="slider-item"
+                  style={{ width: sliderWidth }}
+                  key={index}
+                >
+                  {child}
+                </div>
+              );
+            })}
+        </div>
         <button onClick={this.handleClickRight}>click</button>
-      </div>
+      </>
     );
   }
 }
