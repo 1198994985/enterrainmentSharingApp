@@ -1,5 +1,7 @@
 import React, { PureComponent } from "react";
+import throttle from "../../untils/throttle";
 import "./index.css";
+
 export interface IProps {
   /**
    * 自定义样式
@@ -46,6 +48,8 @@ export default class Slider extends PureComponent<IProps, IState> {
   constructor(props: Readonly<IProps>) {
     super(props);
     this.isTransition = false;
+    this.handleClickLeft = throttle(this.handleClickLeft, props.speed, true);
+    this.handleClickRight = throttle(this.handleClickRight, props.speed, true);
   }
   private static defaultProps = {
     autoPlay: false,
@@ -63,16 +67,11 @@ export default class Slider extends PureComponent<IProps, IState> {
     slideCount: 0
   };
 
-  addTransition = () => {
-    this.isTransition = true;
-  };
-  removeTransition = () => {
-    this.isTransition = false;
-  };
   handleClickLeft = () => {
     this.setState({ index: this.state.index - 1 });
   };
   handleClickRight = () => {
+    console.log("clickRightButton");
     this.setState({ index: this.state.index + 1 });
   };
   handleTransitionEnd = () => {
@@ -98,29 +97,20 @@ export default class Slider extends PureComponent<IProps, IState> {
     if (slideCount >= 1) {
       this.setState({ index: 1, slideCount: slideCount + 2 });
     }
-
-    // // 监听动画结束
-    // slider?.addEventListener("transitionend", () => {
-    //   if (this.state.index === this.state.slideCount - 1) {
-    //     console.log("this.state.index", this.state.index);
-    //     this.removeTransition();
-    //     this.setState({ index: 1 });
-    //   }
-    // });
   }
   render() {
     const { children, speed, className } = this.props;
-    const { index, sliderWidth, slideCount } = this.state;
+    const { index, sliderWidth } = this.state;
     const {
       isTransition,
       handleClickLeft,
       handleClickRight,
       handleTransitionEnd
     } = this;
-    // const childLength = React.Children.count(children);
-    let sliderStyle;
+
     let sliders = React.Children.toArray(children);
     let sliderItems: React.ReactNode[] = [];
+    let sliderStyle;
 
     if (!children) return null;
     else {
@@ -155,11 +145,6 @@ export default class Slider extends PureComponent<IProps, IState> {
                   className="slider-item"
                   style={{ width: sliderWidth }}
                   key={childIndex}
-                  z-index={
-                    childIndex === 0 || childIndex === slideCount - 1
-                      ? 99 - childIndex
-                      : 70
-                  }
                 >
                   {child}
                 </div>
@@ -172,4 +157,10 @@ export default class Slider extends PureComponent<IProps, IState> {
       </>
     );
   }
+  addTransition = () => {
+    this.isTransition = true;
+  };
+  removeTransition = () => {
+    this.isTransition = false;
+  };
 }

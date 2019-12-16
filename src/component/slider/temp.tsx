@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import throttle from "../../untils/throttle";
 import "./index.css";
 export interface IProps {
   /**
@@ -46,6 +47,8 @@ export default class Slider extends PureComponent<IProps, IState> {
   constructor(props: Readonly<IProps>) {
     super(props);
     this.isTransition = true;
+    this.handleClickLeft = throttle(this.handleClickLeft, props.speed, true);
+    this.handleClickRight = throttle(this.handleClickRight, props.speed, true);
   }
   private static defaultProps = {
     autoPlay: false,
@@ -70,16 +73,7 @@ export default class Slider extends PureComponent<IProps, IState> {
     console.log("removeTransition");
     this.isTransition = false;
   };
-  resetTransition = (newIndex: number) => {
-    this.removeTransition();
-    this.setState({
-      index: newIndex
-    });
-    this.addTransition();
-  };
-  setTranslateX = () => {};
   handleClickLeft = () => {
-    // TODO: 这里没有对index==0的情况处理,因为一开始
     this.setState(
       prevState => ({
         index: prevState.index - 1
@@ -94,8 +88,6 @@ export default class Slider extends PureComponent<IProps, IState> {
         }
       }
     );
-
-    // 不等于0,直接设置索引
   };
   handleClickRight = () => {
     if (this.isTransition === false) {
@@ -103,6 +95,7 @@ export default class Slider extends PureComponent<IProps, IState> {
     }
     this.setState(preState => ({ index: preState.index + 1 }));
   };
+  
   componentDidUpdate() {
     const { index, slideCount } = this.state;
     const { speed } = this.props;

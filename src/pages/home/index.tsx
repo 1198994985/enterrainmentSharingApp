@@ -22,10 +22,10 @@ const Home: React.FC<Props> = () => {
                 objectFit: "cover",
                 height: "100%",
                 width: "100%",
-                userSelect: "none",
+                userSelect: "none"
                 // transform: "translate3D(0, 0, 0)"
               }}
-              src="https://wx3.sinaimg.cn/mw690/63207a53ly1g9yo0mfdkoj20gk0gkafe.jpg"
+              src="https://wx1.sinaimg.cn/mw690/884f7263gy1g9yrnz0mnbj20fr0frjuk.jpg"
               draggable="false"
             />
           </div>
@@ -42,7 +42,7 @@ const Home: React.FC<Props> = () => {
                 display: "inline-block",
                 objectFit: "cover",
                 height: "100%",
-                width: "100%",
+                width: "100%"
                 // transform: "translate3D(0, 0, 0)"
               }}
               src="https://ww2.sinaimg.cn/bmiddle/a5cfff19ly1g9xvwo4ux6j20jg0yjaib.jpg"

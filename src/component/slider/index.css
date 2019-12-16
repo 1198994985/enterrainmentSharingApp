@@ -12,10 +12,9 @@
 }
 
 .slider-item {
-  transform                  : rotateZ(360deg);
-  height                     : 100%;
-  flex-shrink                : 0;
-  background-color           : pink;
-  box-sizing                 : border-box;
-  opacity                    : 1;
+  transform  : rotateZ(0);
+  height     : 100%;
+  flex-shrink: 0;
+  box-sizing : border-box;
+  opacity    : 1;
 }
