@@ -1,43 +1,58 @@
-
-import React from 'react'
-import Slider from '../../component/slider'
-interface Props {
-  
-}
+import React from "react";
+import Slider from "../../component/slider";
+interface Props {}
 
 const Home: React.FC<Props> = () => {
   return (
     <>
       Home
-      <div style={{ height: "110px", textAlign: "center" }}>
+      <div style={{ height: "450px", textAlign: "center" }}>
         <Slider>
-          <div style={{ display: "flex" }}>
-            <div
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              height: "100%",
+              width: "100%"
+            }}
+          >
+            <img
               style={{
-                height: "50px",
-                width: "50px",
-                border: "2px solid black"
+                display: "inline-block",
+                objectFit: "cover",
+                height: "100%",
+                width: "100%",
+                userSelect: "none",
+                // transform: "translate3D(0, 0, 0)"
               }}
-            >
-              7
-            </div>
-            <div
-              style={{
-                height: "50px",
-                width: "50px",
-                border: "2px solid black"
-              }}
-            >
-              8
-            </div>
+              src="https://wx3.sinaimg.cn/mw690/63207a53ly1g9yo0mfdkoj20gk0gkafe.jpg"
+              draggable="false"
+            />
           </div>
-
-          <div>2</div>
-          <div>3</div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              height: "100%",
+              width: "100%"
+            }}
+          >
+            <img
+              style={{
+                display: "inline-block",
+                objectFit: "cover",
+                height: "100%",
+                width: "100%",
+                // transform: "translate3D(0, 0, 0)"
+              }}
+              src="https://ww2.sinaimg.cn/bmiddle/a5cfff19ly1g9xvwo4ux6j20jg0yjaib.jpg"
+              draggable="false"
+            />
+          </div>
         </Slider>
       </div>
     </>
   );
-}
+};
 
 export default Home;

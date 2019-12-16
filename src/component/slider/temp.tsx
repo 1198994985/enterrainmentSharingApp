@@ -127,7 +127,8 @@ export default class Slider extends PureComponent<IProps, IState> {
       this.setState({ index: 1, slideCount: slideCount + 2 });
     }
 
-    
+    // // 监听动画结束
+    // slider?.addEventListener("transitionend", () => {});
   }
   render() {
     const { children, speed } = this.props;

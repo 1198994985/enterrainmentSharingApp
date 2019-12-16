@@ -45,7 +45,7 @@ export default class Slider extends PureComponent<IProps, IState> {
   isTransition: boolean;
   constructor(props: Readonly<IProps>) {
     super(props);
-    this.isTransition = true;
+    this.isTransition = false;
   }
   private static defaultProps = {
     autoPlay: false,
@@ -54,7 +54,8 @@ export default class Slider extends PureComponent<IProps, IState> {
     lazyLoad: false,
     arrows: true,
     arrowSize: "medium",
-    arrowPosition: "inner"
+    arrowPosition: "inner",
+    className: "slider-wrap"
   };
   state = {
     index: 0,
@@ -69,11 +70,9 @@ export default class Slider extends PureComponent<IProps, IState> {
     this.isTransition = false;
   };
   handleClickLeft = () => {
-    if (this.isTransition === false) this.addTransition();
     this.setState({ index: this.state.index - 1 });
   };
   handleClickRight = () => {
-    if (this.isTransition === false) this.addTransition();
     this.setState({ index: this.state.index + 1 });
   };
   handleTransitionEnd = () => {
@@ -86,19 +85,19 @@ export default class Slider extends PureComponent<IProps, IState> {
       this.setState({ index: slideCount - 2 });
     }
   };
-
+  componentDidUpdate() {
+    if (this.isTransition === false) this.addTransition();
+  }
   componentDidMount() {
-    let slider = document.getElementById("slider");
+    let slider = document.getElementById("slider-list");
     if (slider) {
       // @ts-ignore
-      this.setState(() => ({ sliderWidth: slider.offsetWidth }));
+      this.setState({ sliderWidth: slider.offsetWidth });
     }
     let slideCount = React.Children.count(this.props.children);
     if (slideCount >= 1) {
-      // 个数大于 1,可以轮播,收尾添加元素
       this.setState({ index: 1, slideCount: slideCount + 2 });
     }
-    console.log('slideCount :', slideCount);
 
     // // 监听动画结束
     // slider?.addEventListener("transitionend", () => {
@@ -110,8 +109,8 @@ export default class Slider extends PureComponent<IProps, IState> {
     // });
   }
   render() {
-    const { children, speed } = this.props;
-    const { index, sliderWidth } = this.state;
+    const { children, speed, className } = this.props;
+    const { index, sliderWidth, slideCount } = this.state;
     const {
       isTransition,
       handleClickLeft,
@@ -123,9 +122,8 @@ export default class Slider extends PureComponent<IProps, IState> {
     let sliders = React.Children.toArray(children);
     let sliderItems: React.ReactNode[] = [];
 
-    // 无 item 不显示
     if (!children) return null;
-    else  {
+    else {
       // 首尾添加 item 为了轮播
       sliderItems.push(sliders[sliders.length - 1]);
       sliders.map(item => {
@@ -144,19 +142,24 @@ export default class Slider extends PureComponent<IProps, IState> {
 
     return (
       <>
-        <div className="slider-wrap">
+        <div className={className}>
           <div
-            id="slider"
-            className="slider"
+            id="slider-list"
+            className="slider-list"
             style={sliderStyle || {}}
             onTransitionEnd={handleTransitionEnd}
           >
-            {sliderItems.map((child, index) => {
+            {sliderItems.map((child, childIndex) => {
               return (
                 <div
                   className="slider-item"
                   style={{ width: sliderWidth }}
-                  key={index}
+                  key={childIndex}
+                  z-index={
+                    childIndex === 0 || childIndex === slideCount - 1
+                      ? 99 - childIndex
+                      : 70
+                  }
                 >
                   {child}
                 </div>
