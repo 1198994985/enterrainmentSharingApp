@@ -64,32 +64,17 @@ export default class Slider extends PureComponent<IProps, IState> {
 
   addTransition = () => {
     this.isTransition = true;
-    console.log("addTransition");
   };
   removeTransition = () => {
-    console.log("removeTransition");
     this.isTransition = false;
   };
-  resetTransition = (newIndex: number) => {
-    this.removeTransition();
-    this.setState({
-      index: newIndex
-    });
-    this.addTransition();
-  };
-  setTranslateX = () => {};
   handleClickLeft = () => {
-    if (this.isTransition === false) {
-      this.addTransition();
-    }
-    console.log("clickLeft ", this.state.index);
-    this.setState(preState => ({ index: preState.index - 1 }));
+    if (this.isTransition === false) this.addTransition();
+    this.setState({ index: this.state.index - 1 });
   };
   handleClickRight = () => {
-    if (this.isTransition === false) {
-      this.addTransition();
-    }
-    this.setState(preState => ({ index: preState.index + 1 }));
+    if (this.isTransition === false) this.addTransition();
+    this.setState({ index: this.state.index + 1 });
   };
   handleTransitionEnd = () => {
     const { index, slideCount } = this.state;
@@ -107,13 +92,13 @@ export default class Slider extends PureComponent<IProps, IState> {
     if (slider) {
       // @ts-ignore
       this.setState(() => ({ sliderWidth: slider.offsetWidth }));
-      console.log("slider.offsetWidth :", slider.offsetWidth);
     }
     let slideCount = React.Children.count(this.props.children);
-    if (slideCount > 1) {
+    if (slideCount >= 1) {
       // 个数大于 1,可以轮播,收尾添加元素
       this.setState({ index: 1, slideCount: slideCount + 2 });
     }
+    console.log('slideCount :', slideCount);
 
     // // 监听动画结束
     // slider?.addEventListener("transitionend", () => {
@@ -126,18 +111,21 @@ export default class Slider extends PureComponent<IProps, IState> {
   }
   render() {
     const { children, speed } = this.props;
-    const { index, slideCount, sliderWidth } = this.state;
-    const { isTransition } = this;
-    const childLength = React.Children.count(children);
+    const { index, sliderWidth } = this.state;
+    const {
+      isTransition,
+      handleClickLeft,
+      handleClickRight,
+      handleTransitionEnd
+    } = this;
+    // const childLength = React.Children.count(children);
     let sliderStyle;
     let sliders = React.Children.toArray(children);
     let sliderItems: React.ReactNode[] = [];
 
     // 无 item 不显示
-    if (childLength === 0 || !children) return null;
-    else if (childLength === 1) {
-      // 单个 item 不显示箭头和进度栏
-    } else if (childLength > 1) {
+    if (!children) return null;
+    else  {
       // 首尾添加 item 为了轮播
       sliderItems.push(sliders[sliders.length - 1]);
       sliders.map(item => {
@@ -145,6 +133,7 @@ export default class Slider extends PureComponent<IProps, IState> {
       });
       sliderItems.push(sliders[0]);
     }
+    // 如果获取到宽度，设置style
     if (sliderWidth) {
       sliderStyle = {
         transform: `translateX(${-(index * sliderWidth)}px)`,
@@ -160,24 +149,23 @@ export default class Slider extends PureComponent<IProps, IState> {
             id="slider"
             className="slider"
             style={sliderStyle || {}}
-            onTransitionEnd={this.handleTransitionEnd}
+            onTransitionEnd={handleTransitionEnd}
           >
-            {index &&
-              sliderItems.map((child, index) => {
-                return (
-                  <div
-                    className="slider-item"
-                    style={{ width: sliderWidth }}
-                    key={index}
-                  >
-                    {child}
-                  </div>
-                );
-              })}
+            {sliderItems.map((child, index) => {
+              return (
+                <div
+                  className="slider-item"
+                  style={{ width: sliderWidth }}
+                  key={index}
+                >
+                  {child}
+                </div>
+              );
+            })}
           </div>
         </div>
-        <button onClick={this.handleClickLeft}>left</button>
-        <button onClick={this.handleClickRight}>right</button>
+        <button onClick={handleClickLeft}>left</button>
+        <button onClick={handleClickRight}>right</button>
       </>
     );
   }
