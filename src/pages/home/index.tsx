@@ -9,12 +9,12 @@ const Home: React.FC<Props> = () => {
   return (
     <>
       Home
-      <div style={{ height: "120px" }}>
+      <div style={{ height: "110px",lineHeight:"100px",textAlign:"center" }}>
         <Slider>
-          <span>1</span>
+          <div>1</div>
 
-          <span>2</span>
-          <span>3</span>
+          <div>2</div>
+          <div>3</div>
         </Slider>
       </div>
     </>

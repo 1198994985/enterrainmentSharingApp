@@ -79,11 +79,23 @@ export default class Slider extends PureComponent<IProps, IState> {
   };
   setTranslateX = () => {};
   handleClickLeft = () => {
-    if (this.isTransition === false) {
-      this.addTransition();
-    }
-    console.log("clickLeft ", this.state.index);
-    this.setState(preState => ({ index: preState.index - 1 }));
+    // TODO: 这里没有对index==0的情况处理,因为一开始
+    this.setState(
+      prevState => ({
+        index: prevState.index - 1
+      }),
+      () => {
+        if (this.state.index === 0) {
+          this.removeTransition();
+          this.setState(prevState => ({
+            index: prevState.slideCount - 2
+          }));
+          this.addTransition();
+        }
+      }
+    );
+
+    // 不等于0,直接设置索引
   };
   handleClickRight = () => {
     if (this.isTransition === false) {
@@ -91,16 +103,16 @@ export default class Slider extends PureComponent<IProps, IState> {
     }
     this.setState(preState => ({ index: preState.index + 1 }));
   };
-  handleTransitionEnd = () => {
+  componentDidUpdate() {
     const { index, slideCount } = this.state;
+    const { speed } = this.props;
     if (index === slideCount - 1) {
       this.removeTransition();
-      this.setState({ index: 1 });
-    } else if (index === 0) {
-      this.removeTransition();
-      this.setState({ index: slideCount - 2 });
+      setTimeout(() => {
+        this.setState({ index: 1 });
+      }, speed);
     }
-  };
+  }
 
   componentDidMount() {
     let slider = document.getElementById("slider");
@@ -115,14 +127,7 @@ export default class Slider extends PureComponent<IProps, IState> {
       this.setState({ index: 1, slideCount: slideCount + 2 });
     }
 
-    // // 监听动画结束
-    // slider?.addEventListener("transitionend", () => {
-    //   if (this.state.index === this.state.slideCount - 1) {
-    //     console.log("this.state.index", this.state.index);
-    //     this.removeTransition();
-    //     this.setState({ index: 1 });
-    //   }
-    // });
+    
   }
   render() {
     const { children, speed } = this.props;
@@ -145,23 +150,18 @@ export default class Slider extends PureComponent<IProps, IState> {
       });
       sliderItems.push(sliders[0]);
     }
-    if (sliderWidth) {
+    if (index) {
       sliderStyle = {
         transform: `translateX(${-(index * sliderWidth)}px)`,
         transition: isTransition ? `all ${speed}ms` : "none",
-        width: sliderItems.length * sliderWidth
+        width: slideCount * sliderWidth
       };
     }
 
     return (
       <>
         <div className="slider-wrap">
-          <div
-            id="slider"
-            className="slider"
-            style={sliderStyle || {}}
-            onTransitionEnd={this.handleTransitionEnd}
-          >
+          <div id="slider" className="slider" style={sliderStyle || {}}>
             {index &&
               sliderItems.map((child, index) => {
                 return (
@@ -176,8 +176,7 @@ export default class Slider extends PureComponent<IProps, IState> {
               })}
           </div>
         </div>
-        <button onClick={this.handleClickLeft}>left</button>
-        <button onClick={this.handleClickRight}>right</button>
+        <button onClick={this.handleClickRight}>click</button>
       </>
     );
   }
