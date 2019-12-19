@@ -54,7 +54,7 @@ export default class Slider extends PureComponent<IProps, IState> {
   private static defaultProps = {
     autoPlay: false,
     autoPlaySpeed: 3000,
-    speed: 700,
+    speed: 300,
     lazyLoad: false,
     arrows: true,
     arrowSize: "medium",
@@ -71,7 +71,6 @@ export default class Slider extends PureComponent<IProps, IState> {
     this.setState({ index: this.state.index - 1 });
   };
   handleClickRight = () => {
-    console.log("clickRightButton");
     this.setState({ index: this.state.index + 1 });
   };
   handleTransitionEnd = () => {
@@ -84,19 +83,31 @@ export default class Slider extends PureComponent<IProps, IState> {
       this.setState({ index: slideCount - 2 });
     }
   };
+  handleWindowResize = () => {
+    let sliderWrap = document.getElementById("slider-wrap");
+    sliderWrap &&
+      this.setState({
+        sliderWidth: sliderWrap.offsetWidth
+      });
+  };
   componentDidUpdate() {
     if (this.isTransition === false) this.addTransition();
   }
   componentDidMount() {
-    let slider = document.getElementById("slider-list");
+    let slider = document.getElementById("slider-wrap");
+
     if (slider) {
       // @ts-ignore
       this.setState({ sliderWidth: slider.offsetWidth });
+      window.addEventListener("resize", this.handleWindowResize);
     }
     let slideCount = React.Children.count(this.props.children);
     if (slideCount >= 1) {
       this.setState({ index: 1, slideCount: slideCount + 2 });
     }
+  }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleWindowResize);
   }
   render() {
     const { children, speed, className } = this.props;
@@ -116,7 +127,7 @@ export default class Slider extends PureComponent<IProps, IState> {
     else {
       // 首尾添加 item 为了轮播
       sliderItems.push(sliders[sliders.length - 1]);
-      sliders.map(item => {
+      sliders.forEach(item => {
         sliderItems.push(item);
       });
       sliderItems.push(sliders[0]);
@@ -132,9 +143,8 @@ export default class Slider extends PureComponent<IProps, IState> {
 
     return (
       <>
-        <div className={className}>
+        <div id={className} className={className}>
           <div
-            id="slider-list"
             className="slider-list"
             style={sliderStyle || {}}
             onTransitionEnd={handleTransitionEnd}

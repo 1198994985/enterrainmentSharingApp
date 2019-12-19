@@ -24,5 +24,8 @@
   - 解决:todo: 用节流函数包裹 click 函数
   - 添加节流函数方法,在constructor中添加节流,`this.handleClickLeft` 采用箭头函数,
     `this.handleClickLeft = throttle(this.handleClickLeft, props.speed, true);`
+- 问题 3 界面缩放时,轮播图大小没有更新,导致其他图片显示
+  - 原因: 没有添加窗口大小变化的事件监听
+  - 解决: 通过addEventListener 添加窗口的事件监听,窗口变化,重置sliderWidth.
 
 

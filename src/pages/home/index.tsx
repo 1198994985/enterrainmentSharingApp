@@ -6,49 +6,32 @@ const Home: React.FC<Props> = () => {
   return (
     <>
       Home
-      <div style={{ height: "450px", textAlign: "center" }}>
+      <div
+        style={{ height: "500px", textAlign: "center", borderRadius: "10px" }}
+      >
         <Slider>
-          <div
+          <img
             style={{
-              display: "flex",
-              justifyContent: "center",
+              display: "inline-block",
+              objectFit: "cover",
+              borderRadius: "20px",
               height: "100%",
-              width: "100%"
+              width: "96%"
             }}
-          >
-            <img
-              style={{
-                display: "inline-block",
-                objectFit: "cover",
-                height: "100%",
-                width: "100%",
-                userSelect: "none"
-                // transform: "translate3D(0, 0, 0)"
-              }}
-              src="https://wx1.sinaimg.cn/mw690/884f7263gy1g9yrnz0mnbj20fr0frjuk.jpg"
-              draggable="false"
-            />
-          </div>
-          <div
+            src="https://wx4.sinaimg.cn/mw1024/8546ebd4gy1g9od1j24cdj20m80m8k8p.jpg"
+            draggable="false"
+          />
+          <img
             style={{
-              display: "flex",
-              justifyContent: "center",
+              display: "inline-block",
+              objectFit: "cover",
+              borderRadius: "20px",
               height: "100%",
-              width: "100%"
+              width: "96%"
             }}
-          >
-            <img
-              style={{
-                display: "inline-block",
-                objectFit: "cover",
-                height: "100%",
-                width: "100%"
-                // transform: "translate3D(0, 0, 0)"
-              }}
-              src="https://ww2.sinaimg.cn/bmiddle/a5cfff19ly1g9xvwo4ux6j20jg0yjaib.jpg"
-              draggable="false"
-            />
-          </div>
+            src="https://ww2.sinaimg.cn/bmiddle/a5cfff19ly1g9xvwo4ux6j20jg0yjaib.jpg"
+            draggable="false"
+          />
         </Slider>
       </div>
     </>
