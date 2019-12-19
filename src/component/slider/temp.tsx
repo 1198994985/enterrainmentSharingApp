@@ -1,7 +1,7 @@
-import React, { PureComponent } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import throttle from "../../untils/throttle";
 import "./index.css";
-export interface IProps {
+interface Props {
   /**
    * 自定义样式
    */
@@ -36,107 +36,96 @@ export interface IProps {
   arrowPosition?: "inner" | "outer";
 }
 
-export interface IState {
-  index: number;
-  sliderWidth: number;
-  slideCount: number;
-}
+const Slider: React.FC<Props> = React.memo(
+  ({
+    autoPlay = false,
+    autoPlaySpeed = 3000,
+    speed = 300,
+    lazyLoad = false,
+    arrows = true,
+    arrowSize = "medium",
+    arrowPosition = "inner",
+    className = "slider-wrap",
+    children
+  }) => {
+    const [index, setIndex] = useState<number>(0);
+    const [sliderWidth, setSliderWidth] = useState<number>(0);
+    const [slideCount, setSlideCount] = useState<number>(0);
+    const [isArrowsVisiable, setIsArrowsVisiable] = useState<boolean>(false);
+    const [isTransition, setIsTransition] = useState<boolean>(false);
 
-export default class Slider extends PureComponent<IProps, IState> {
-  isTransition: boolean;
-  constructor(props: Readonly<IProps>) {
-    super(props);
-    this.isTransition = true;
-    this.handleClickLeft = throttle(this.handleClickLeft, props.speed, true);
-    this.handleClickRight = throttle(this.handleClickRight, props.speed, true);
-  }
-  private static defaultProps = {
-    autoPlay: false,
-    autoPlaySpeed: 3000,
-    speed: 700,
-    lazyLoad: false,
-    arrows: true,
-    arrowSize: "medium",
-    arrowPosition: "inner"
-  };
-  state = {
-    index: 0,
-    sliderWidth: 0,
-    slideCount: 0
-  };
+    const addTransition = useCallback(() => {
+      setIsTransition(true);
+    }, []);
+    const removeTransition = useCallback(() => {
+      setIsTransition(false);
+    }, []);
 
-  addTransition = () => {
-    this.isTransition = true;
-    console.log("addTransition");
-  };
-  removeTransition = () => {
-    console.log("removeTransition");
-    this.isTransition = false;
-  };
-  handleClickLeft = () => {
-    this.setState(
-      prevState => ({
-        index: prevState.index - 1
+    const handleClickLeft = useCallback(
+      throttle(function() {
+        setIndex(c => c - 1);
       }),
-      () => {
-        if (this.state.index === 0) {
-          this.removeTransition();
-          this.setState(prevState => ({
-            index: prevState.slideCount - 2
-          }));
-          this.addTransition();
-        }
-      }
+      []
     );
-  };
-  handleClickRight = () => {
-    if (this.isTransition === false) {
-      this.addTransition();
-    }
-    this.setState(preState => ({ index: preState.index + 1 }));
-  };
-  
-  componentDidUpdate() {
-    const { index, slideCount } = this.state;
-    const { speed } = this.props;
-    if (index === slideCount - 1) {
-      this.removeTransition();
-      setTimeout(() => {
-        this.setState({ index: 1 });
-      }, speed);
-    }
-  }
+    const handleClickRight = useCallback(
+      throttle(function() {
+        setIndex(c => c + 1);
+      }),
+      []
+    );
+    const handleTransitionEnd = () => {
+      if (index === slideCount - 1) {
+        removeTransition();
+        setIndex(1);
+      } else if (index === 0) {
+        removeTransition();
+        setSlideCount(slideCount - 2);
+      }
+    };
+    const handleWindowResize = useCallback(() => {
+      let sliderWrap = document.getElementById("slider-wrap");
+      sliderWrap && setSliderWidth(sliderWrap.offsetWidth);
+    }, []);
+    const handleMouseHover = useCallback(() => {
+      if (arrows) {
+        setIsArrowsVisiable(true);
+      }
+    }, [arrows]);
+    const handleMouseLeave = useCallback(() => {
+      setIsArrowsVisiable(false);
+    }, []);
+    useEffect(() => {
+      if (isTransition === false) addTransition();
+    });
+    useEffect(() => {
+      let slider = document.getElementById("slider-wrap");
 
-  componentDidMount() {
-    let slider = document.getElementById("slider");
-    if (slider) {
-      // @ts-ignore
-      this.setState(() => ({ sliderWidth: slider.offsetWidth }));
-      console.log("slider.offsetWidth :", slider.offsetWidth);
-    }
-    let slideCount = React.Children.count(this.props.children);
-    if (slideCount > 1) {
-      // 个数大于 1,可以轮播,收尾添加元素
-      this.setState({ index: 1, slideCount: slideCount + 2 });
-    }
+      if (slider) {
+        // @ts-ignore
+        setSliderWidth(slider.offsetWidth);
+        window.addEventListener("resize", handleWindowResize);
+      }
+      let slideCount = React.Children.count(children);
+      if (slideCount >= 1) {
+        setIndex(1);
+        setSlideCount(slideCount + 2);
+      }
+      return () => {
+        window.removeEventListener("resize", handleWindowResize);
+      };
+    }, [children, handleWindowResize]);
 
-    // // 监听动画结束
-    // slider?.addEventListener("transitionend", () => {});
-  }
-  render() {
-    const { children, speed } = this.props;
-    const { index, slideCount, sliderWidth } = this.state;
-    const { isTransition } = this;
-    const childLength = React.Children.count(children);
-    let sliderStyle;
+    let sliderButtonStyle;
     let sliders = React.Children.toArray(children);
     let sliderItems: React.ReactNode[] = [];
-
-    // 无 item 不显示
-    if (childLength === 0 || !children) return null;
-    else if (childLength === 1) {
-      // 单个 item 不显示箭头和进度栏
-    } else if (childLength > 1) {
+    let sliderStyle;
+    if (isArrowsVisiable === true) {
+      sliderButtonStyle = " arrows";
+    } else {
+      sliderButtonStyle = "";
+    }
+    if (!children) return null;
+    else {
       // 首尾添加 item 为了轮播
       sliderItems.push(sliders[sliders.length - 1]);
       sliders.forEach(item => {
@@ -144,34 +133,54 @@ export default class Slider extends PureComponent<IProps, IState> {
       });
       sliderItems.push(sliders[0]);
     }
-    if (index) {
+    // 如果获取到宽度，设置style
+    if (sliderWidth) {
       sliderStyle = {
         transform: `translateX(${-(index * sliderWidth)}px)`,
         transition: isTransition ? `all ${speed}ms` : "none",
-        width: slideCount * sliderWidth
+        width: sliderItems.length * sliderWidth
       };
     }
-
     return (
       <>
-        <div className="slider-wrap">
-          <div id="slider" className="slider" style={sliderStyle || {}}>
-            {index &&
-              sliderItems.map((child, index) => {
-                return (
-                  <div
-                    className="slider-item"
-                    style={{ width: sliderWidth }}
-                    key={index}
-                  >
-                    {child}
-                  </div>
-                );
-              })}
+        <div
+          id={className}
+          className={className}
+          onMouseOver={arrows ? handleMouseHover : undefined}
+          onMouseLeave={arrows ? handleMouseLeave : undefined}
+        >
+          <div
+            className="slider-list"
+            style={sliderStyle || {}}
+            onTransitionEnd={handleTransitionEnd}
+          >
+            {sliderItems.map((child, childIndex) => {
+              return (
+                <div
+                  className="slider-item"
+                  style={{ width: sliderWidth }}
+                  key={childIndex}
+                >
+                  {child}
+                </div>
+              );
+            })}
+          </div>
+          <div className={"slider-button-left " + sliderButtonStyle}>
+            <span className="iconfont" onClick={handleClickLeft}>
+              &#xe622;
+            </span>
+          </div>
+          <div className={"slider-button-right " + sliderButtonStyle}>
+            {/*  <button onClick={handleClickRight}>right</button> */}
+            <span className="iconfont" onClick={handleClickRight}>
+              &#xe622;
+            </span>
           </div>
         </div>
-        <button onClick={this.handleClickRight}>click</button>
       </>
     );
   }
-}
+);
+
+export default Slider;

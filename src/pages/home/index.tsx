@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from "react";
-import Slider from "../../component/slider";
+import React,{useState,useEffect,useMemo,useCallback} from "react";
+import Slider from "../../component/slider/temp";
 interface Props {}
 
 const Home: React.FC<Props> = () => {
@@ -11,7 +11,7 @@ const Home: React.FC<Props> = () => {
         style={{
           height: "500px",
           textAlign: "center",
-          borderRadius: "20px",
+          borderRadius: "20px"
         }}
       >
         <Slider>
@@ -21,9 +21,10 @@ const Home: React.FC<Props> = () => {
               objectFit: "cover",
               borderRadius: "20px",
               height: "100%",
-              width: "96%"
+              width: "96%",
+              margin: "0 auto"
             }}
-            src="https://wx4.sinaimg.cn/mw1024/8546ebd4gy1g9od1j24cdj20m80m8k8p.jpg"
+            src="https://wx2.sinaimg.cn/mw690/9846815egy1ga2ejdyqryj20u072onpe.jpg"
             draggable="false"
           />
           <img
@@ -32,7 +33,8 @@ const Home: React.FC<Props> = () => {
               objectFit: "cover",
               borderRadius: "20px",
               height: "100%",
-              width: "96%"
+              width: "96%",
+              margin: "0 auto"
             }}
             src="https://ww2.sinaimg.cn/bmiddle/a5cfff19ly1g9xvwo4ux6j20jg0yjaib.jpg"
             draggable="false"
@@ -44,3 +46,5 @@ const Home: React.FC<Props> = () => {
 };
 
 export default Home;
+
+
