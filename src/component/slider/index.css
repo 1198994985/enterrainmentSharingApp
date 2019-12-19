@@ -1,7 +1,11 @@
+@import url("../../iconFront/arrows/iconfont.css");
+
 .slider-wrap {
   width   : 100%;
   height  : 100%;
   overflow: hidden;
+  position: relative;
+
 }
 
 .slider-list {
@@ -17,5 +21,34 @@
   flex-shrink: 0;
   box-sizing : border-box;
   opacity    : 1;
- /* overflow: hidden; */
+  /* overflow: hidden; */
+}
+
+.slider-button-right,
+.slider-button-left {
+  position : absolute;
+  top      : 50%;
+  z-index: 99;
+  user-select:none;
+  cursor:pointer;
+  transition: all 0.2s;
+  opacity: 0.0;
+}
+.arrows{
+  opacity: 1.0;
+}
+.slider-button-left {
+  transform: translateY(-50%);
+  left: 5%;
+}
+
+.slider-button-right {
+  right: 5%;
+  /* transform: ; */
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.iconfont{
+ 
+  font-size:66px;
 }

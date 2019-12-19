@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from "react";
 import Slider from "../../component/slider";
 interface Props {}
@@ -7,12 +8,16 @@ const Home: React.FC<Props> = () => {
     <>
       Home
       <div
-        style={{ height: "500px", textAlign: "center", borderRadius: "10px" }}
+        style={{
+          height: "500px",
+          textAlign: "center",
+          borderRadius: "20px",
+        }}
       >
         <Slider>
           <img
             style={{
-              display: "inline-block",
+              display: "block",
               objectFit: "cover",
               borderRadius: "20px",
               height: "100%",

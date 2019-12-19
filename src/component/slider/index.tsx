@@ -41,6 +41,7 @@ export interface IState {
   index: number;
   sliderWidth: number;
   slideCount: number;
+  isArrowsVisiable: boolean;
 }
 
 export default class Slider extends PureComponent<IProps, IState> {
@@ -64,7 +65,8 @@ export default class Slider extends PureComponent<IProps, IState> {
   state = {
     index: 0,
     sliderWidth: 0,
-    slideCount: 0
+    slideCount: 0,
+    isArrowsVisiable: false
   };
 
   handleClickLeft = () => {
@@ -90,6 +92,14 @@ export default class Slider extends PureComponent<IProps, IState> {
         sliderWidth: sliderWrap.offsetWidth
       });
   };
+  handleMouseHover = () => {
+    if (this.props.arrows) {
+      this.setState({ isArrowsVisiable: true });
+    }
+  };
+  handleMouseLeave = () => {
+      this.setState({ isArrowsVisiable: false });
+  };
   componentDidUpdate() {
     if (this.isTransition === false) this.addTransition();
   }
@@ -110,15 +120,23 @@ export default class Slider extends PureComponent<IProps, IState> {
     window.removeEventListener("resize", this.handleWindowResize);
   }
   render() {
-    const { children, speed, className } = this.props;
-    const { index, sliderWidth } = this.state;
+    const { children, speed, className, arrows } = this.props;
+    const { index, sliderWidth, isArrowsVisiable } = this.state;
     const {
       isTransition,
       handleClickLeft,
       handleClickRight,
-      handleTransitionEnd
+      handleTransitionEnd,
+      handleMouseHover,
+      handleMouseLeave
     } = this;
 
+    let sliderButtonStyle;
+    if (isArrowsVisiable === true) {
+      sliderButtonStyle = " arrows";
+    } else {
+      sliderButtonStyle = "";
+    }
     let sliders = React.Children.toArray(children);
     let sliderItems: React.ReactNode[] = [];
     let sliderStyle;
@@ -143,7 +161,12 @@ export default class Slider extends PureComponent<IProps, IState> {
 
     return (
       <>
-        <div id={className} className={className}>
+        <div
+          id={className}
+          className={className}
+          onMouseOver={arrows ? handleMouseHover : undefined}
+          onMouseLeave={arrows ? handleMouseLeave : undefined}
+        >
           <div
             className="slider-list"
             style={sliderStyle || {}}
@@ -161,9 +184,18 @@ export default class Slider extends PureComponent<IProps, IState> {
               );
             })}
           </div>
+          <div className={"slider-button-left " + sliderButtonStyle}>
+            <span className="iconfont" onClick={handleClickLeft}>
+              &#xe622;
+            </span>
+          </div>
+          <div className={"slider-button-right " + sliderButtonStyle}>
+            {/*  <button onClick={handleClickRight}>right</button> */}
+            <span className="iconfont" onClick={handleClickRight}>
+              &#xe622;
+            </span>
+          </div>
         </div>
-        <button onClick={handleClickLeft}>left</button>
-        <button onClick={handleClickRight}>right</button>
       </>
     );
   }

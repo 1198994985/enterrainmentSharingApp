@@ -139,7 +139,7 @@ export default class Slider extends PureComponent<IProps, IState> {
     } else if (childLength > 1) {
       // 首尾添加 item 为了轮播
       sliderItems.push(sliders[sliders.length - 1]);
-      sliders.map(item => {
+      sliders.forEach(item => {
         sliderItems.push(item);
       });
       sliderItems.push(sliders[0]);
