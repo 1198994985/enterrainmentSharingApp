@@ -93,28 +93,23 @@ export default class Slider extends PureComponent<IProps, IState> {
       });
   };
   handleMouseHover = () => {
-    if (this.props.arrows) {
-      this.setState({ isArrowsVisiable: true });
-    }
+    this.props.arrows && this.setState({ isArrowsVisiable: true });
   };
   handleMouseLeave = () => {
-      this.setState({ isArrowsVisiable: false });
+    this.setState({ isArrowsVisiable: false });
   };
   componentDidUpdate() {
-    if (this.isTransition === false) this.addTransition();
+    this.isTransition || this.addTransition();
   }
   componentDidMount() {
     let slider = document.getElementById("slider-wrap");
-
     if (slider) {
       // @ts-ignore
       this.setState({ sliderWidth: slider.offsetWidth });
       window.addEventListener("resize", this.handleWindowResize);
     }
     let slideCount = React.Children.count(this.props.children);
-    if (slideCount >= 1) {
-      this.setState({ index: 1, slideCount: slideCount + 2 });
-    }
+    (slideCount >= 1) && this.setState({ index: 1, slideCount: slideCount + 2 });
   }
   componentWillUnmount() {
     window.removeEventListener("resize", this.handleWindowResize);

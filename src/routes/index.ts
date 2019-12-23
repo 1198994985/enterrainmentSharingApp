@@ -9,7 +9,9 @@ const routesConfig: RouteConfig[] = [
       {
         path: "/",
         component: Home,
-        routes: []
+        routes: [
+          
+        ]
       }
     ]
   }

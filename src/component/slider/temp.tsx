@@ -62,15 +62,23 @@ const Slider: React.FC<Props> = React.memo(
     }, []);
 
     const handleClickLeft = useCallback(
-      throttle(function() {
-        setIndex(c => c - 1);
-      }),
+      throttle(
+        function() {
+          setIndex(c => c - 1);
+        },
+        speed,
+        true
+      ),
       []
     );
     const handleClickRight = useCallback(
-      throttle(function() {
-        setIndex(c => c + 1);
-      }),
+      throttle(
+        function() {
+          setIndex(c => c + 1);
+        },
+        speed,
+        true
+      ),
       []
     );
     const handleTransitionEnd = () => {
@@ -172,7 +180,6 @@ const Slider: React.FC<Props> = React.memo(
             </span>
           </div>
           <div className={"slider-button-right " + sliderButtonStyle}>
-            {/*  <button onClick={handleClickRight}>right</button> */}
             <span className="iconfont" onClick={handleClickRight}>
               &#xe622;
             </span>

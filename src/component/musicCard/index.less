@@ -1,0 +1,34 @@
+@imgHeight: 220px;
+@imgWidth:160px;
+
+.playList-item {
+  position: relative;
+  overflow: hidden;
+  flex  : 1 1 18%;
+  height: @imgHeight;
+  margin: 0 1%;
+  .playList-img {
+    height : 160px;
+    max-height : 160px;
+    max-width :100%;
+    object-fit: cover;
+    position  : absolute;
+    left      : 0;
+    top       : 0;
+    cursor    : pointer;
+    transition: transform .75s;
+    transform : scale(1) translateZ(0);
+
+    &:hover {
+      transform: scale(1.07) translateZ(0);
+    }
+  }
+
+}
+
+.playList {
+  display        : flex;
+  justify-content: space-around;
+  margin         : 0 130px;
+
+}

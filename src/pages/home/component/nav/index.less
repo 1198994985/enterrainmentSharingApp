@@ -1,0 +1,32 @@
+@import '../../../../global.less';
+@itemColor : #F1F2F3;
+@itemHeight: 42px;
+
+.nav-item {
+  display         : inline-block;
+  background-color: @itemColor;
+  padding         : 0 12px;
+  height          : @itemHeight ;
+  border-radius   : 21px;
+  color           : #000;
+
+  .nav-font {
+    font-weight: 700;
+  }
+
+  .nav-link {
+    margin: 0 6px;
+    line-height: @itemHeight;
+    font-size  : 15px;
+    cursor     : pointer
+  }
+  .nav-link:hover{
+    color:@themeColor;
+  }
+}
+
+.nav-home {
+  display        : flex;
+  justify-content: space-around;
+  padding        : 12px;
+}
