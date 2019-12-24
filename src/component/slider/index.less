@@ -26,29 +26,31 @@
 
 .slider-button-right,
 .slider-button-left {
-  position : absolute;
-  top      : 50%;
-  z-index: 99;
-  user-select:none;
-  cursor:pointer;
-  transition: all 0.2s;
-  opacity: 0.0;
+  position   : absolute;
+  top        : 50%;
+  z-index    : 99;
+  user-select: none;
+  cursor     : pointer;
+  transition : all 0.2s;
+  opacity    : 0.0;
+
+  .iconfont {
+
+    font-size: 66px;
+  }
 }
-.arrows{
+
+.arrows {
   opacity: 1.0;
 }
+
 .slider-button-left {
   transform: translateY(-50%);
-  left: 5%;
+  left     : 5%;
 }
 
 .slider-button-right {
-  right: 5%;
+  right       : 5%;
   /* transform: ; */
-  transform: translateY(-50%) rotate(180deg);
-}
-
-.iconfont{
- 
-  font-size:66px;
+  transform   : translateY(-50%) rotate(180deg);
 }

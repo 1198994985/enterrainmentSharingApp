@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import throttle from "../../untils/throttle";
-import "./index.css";
+import "./index.less";
 
 export interface IProps {
   /**

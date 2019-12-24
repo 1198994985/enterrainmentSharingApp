@@ -67,7 +67,7 @@ const Home: React.FC<Props> = () => {
         </audio> */}
       </div>
       <Nav />
-      <Slider speed={1000}>
+      <Slider speed={700}>
     
         <PlayList />
       </Slider>
