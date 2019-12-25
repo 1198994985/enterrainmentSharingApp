@@ -16,7 +16,7 @@ const routesConfig: RouteConfig[] = [
         routes: []
       },
       {
-        path: "/test",
+        path: "/song/:id",
         component: test,
         routes: []
       }

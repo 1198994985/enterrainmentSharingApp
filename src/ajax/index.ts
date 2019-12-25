@@ -1,9 +1,8 @@
 import axios from "axios";
 import { message } from "antd";
 
-
 axios.defaults.withCredentials = true; // 跨域
-axios.defaults.baseURL = "http://localhost:3000";
+axios.defaults.baseURL = "https://musicapi.leanapp.cn/";
 
 let whiteList = ["/login", "/register"];
 
@@ -77,7 +76,7 @@ axios.interceptors.request.use(
   error => {}
 );
 
-const request = async (url:string, data = {}, type = "GET") => {
+const request = async (url: string, data = {}, type = "GET") => {
   let promise;
   try {
     if (type === "GET") {
@@ -100,6 +99,13 @@ const request = async (url:string, data = {}, type = "GET") => {
   }
 };
 
+// http://musicapi.leanapp.cn/personalized?limit=10
+/**
+ * 推荐歌单
+ * @param count 获取数量
+ */
+export const rqRmdSongList = (count: number = 10) =>
+  request(`/personalized?limit=${count}`, {}, "GET");
 // export const tryLogin = (account:string, password:string) =>
 //   request("/login", { account, password }, "POST");
 // export const getMyInfo = () => request("/userinfo", {}, "GET");
@@ -107,6 +113,56 @@ const request = async (url:string, data = {}, type = "GET") => {
  * 获取歌曲详情 /song/detail?ids=347230
  */
 
- /**
-  * 获取音乐 https://music.163.com/song/media/outer/url?id=id.mp3 
-  */
+/**
+ * 获取音乐 https://music.163.com/song/media/outer/url?id=id.mp3
+ */
+
+/**
+ * 获取mv的播放地址 描述 http://musicapi.leanapp.cn/mv/detail?mvid=10904989
+ */
+
+/**
+ * 获取歌曲榜单
+ * @param count 榜单
+ */
+export const rqTopList = async (count: number = 0) => {
+  let list = [];
+  const rankList = await request(`/top/list?idx=${count}`, {}, "GET");
+  if (rankList && rankList.code == 200) {
+    let rank = rankList["playlist"]["tracks"];
+    for (let i in rank) {
+      list.push({
+        id: rank[i]["id"],
+        name: rank[i]["name"],
+        author: rank[i]["ar"][0]["name"],
+        picUrl: rank[i]["al"]["picUrl"],
+        mvId: rank[i]["mv"]
+      });
+    }
+  }
+
+  return list.slice(0, 10);
+};
+
+/**
+ * 获取mv信息
+ * @param count mv数量
+ */
+export const rqMvList = async (count: number = 12) => {
+  let list = [];
+  const mvList = await request(`/top/mv?limit=${count}`, {}, "GET");
+  if (mvList && mvList.code == 200) {
+    let rank = mvList["data"];
+    for (let i in rank) {
+      list.push({
+        id: rank[i]["id"],
+        name: rank[i]["name"],
+        author: rank[i]["artistName"],
+        authorId: rank[i]["artistId"],
+        picUrl: rank[i]["cover"],
+        playCount: rank[i]["playCount"]
+      });
+    }
+  }
+  return list;
+};

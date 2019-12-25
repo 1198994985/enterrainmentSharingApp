@@ -2,24 +2,61 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Slider from "../../component/slider/index";
 import rayTracing, { run } from "./rayTracing";
+import { rqRmdSongList, rqTopList } from "../../ajax/";
 import {
   HomeHeader,
   Nav,
   PlayListHead,
   RankList,
-  VedioList
+  VedioAera
 } from "./component";
 import { MusicCard, PlayList } from "../../component/";
 import "./index.less";
-interface Props {}
+interface IrmdList {
+  id: number;
+  name: string;
+  picUrl: string;
+  playCount: number;
+}
+interface IrankList {
+  id: number;
+  name: string;
+  picUrl: string;
+  mvId: number;
+  author: string;
+}
+const Home: React.FC = () => {
+  const [rmdList, setRmdList] = useState<IrmdList[]>();
+  const [rankList, setRankList] = useState<IrankList[]>();
 
-const Home: React.FC<Props> = () => {
-  // return (
-  //   <>
-  //     <canvas id="renderCanvas" width="600" height="600"></canvas>
-  //     <button onClick={run}>add</button>
-  //   </>
-  // );
+  useEffect(() => {
+    (async () => {
+      const data = await rqRmdSongList();
+      console.log("data ", data);
+      let list = [];
+      if (data && data.code === 200) {
+        let obj = data["result"];
+        for (let i in data["result"]) {
+          console.log(typeof obj[i]["id"]);
+          console.log(typeof obj[i]["playCount"]);
+          list.push({
+            id: obj[i]["id"],
+            name: obj[i]["name"],
+            picUrl: obj[i]["picUrl"],
+            playCount: obj[i]["playCount"]
+          });
+        }
+        setRmdList(list);
+      }
+
+      const rankList = await rqTopList(1);
+      const rankList2 = await rqTopList(2);
+      const rankList3 = await rqTopList(4);
+   
+      setRankList([...rankList,...rankList2,...rankList3]);
+    })();
+    return () => {};
+  }, []);
   return (
     <>
       <HomeHeader></HomeHeader>
@@ -76,17 +113,29 @@ const Home: React.FC<Props> = () => {
 
       <PlayListHead />
       <Slider speed={700}>
-        <PlayList />
+        <PlayList imgUrlList={rmdList && rmdList?.slice(0, 5)} />
+        <PlayList imgUrlList={rmdList && rmdList?.slice(5, 10)} />
       </Slider>
-      <VedioList />
+      <VedioAera />
       {/* <Slider speed={700}>
         <PlayList />
       </Slider> */}
 
-      <div style={{ width: "500px" }}>
-        <RankList />
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "space-around",
+          margin: "0 30px"
+        }}
+      >
+        <RankList rankList={rankList?.slice(0, 10)} title="云音乐新歌榜" />
+        <RankList rankList={rankList?.slice(10, 20)} title="网易原创歌曲榜" />
+        <RankList rankList={rankList?.slice(20, 30)} title="云音乐飙升榜" />
+
+        {/* <RankList />
+        <RankList /> */}
       </div>
-     
     </>
   );
 };

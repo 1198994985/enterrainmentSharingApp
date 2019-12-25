@@ -55,17 +55,12 @@ const PlayListTitle: React.FC<IPLTitle> = ({
 
 interface IPLHead {}
 
-const PlayListHead: React.FC<IPLHead> = () => {
+const PlayListHead: React.FC<IPLHead> = ({children}) => {
   return (
     <div className="playlist-head">
       <PlayListTitle name="今日热门" />
       <div className="playlist-tabs">
-        <PlayListTab name="音乐" />
-
-        <PlayListTab name="音乐" />
-        <PlayListTab name="今日腿" />
-        <PlayListTab name="英雄联盟" />
-        <PlayListTab name="音乐" />
+        {children}
       </div>
     </div>
   );

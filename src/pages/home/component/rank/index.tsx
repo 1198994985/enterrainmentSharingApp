@@ -1,77 +1,94 @@
-
 // @ts-nocheck
 import React from "react";
 import { List, Typography } from "antd";
 import { PlayListTab, PlayListHead, PlayListTitle } from "../playListHead";
-import { Link, NavLink,LinkProps } from "react-router-dom";
+import { Link, NavLink, LinkProps } from "react-router-dom";
 import "./index.less";
 interface IPnum {
   name?: number;
 }
 const RankNum: React.FC<IPnum> = ({ name }) => {
+  if (name < 4) {
+    return <span className="rank-num rank-num-hot">{name}</span>;
+  }
   return (
-    <>
       <span className="rank-num">{name}</span>
-    </>
   );
 };
 
+
 interface IPRankTitale {
-  name?: string;
+  name: string;
+  desc: string;
 }
-const RankTitle: React.FC<IPRankTitale> = ({ name }) => {
+const RankTitle: React.FC<IPRankTitale> = ({ name,desc }) => {
   return (
     <div className="rank-link">
       <span className="rank-title">{name}</span>
-      <div className="rank-desc">这是这首歌的介绍</div>
+      <div className="rank-desc">{desc}</div>
     </div>
   );
 };
+
 interface IPitem {
   name?: string;
   num?: number;
-  to?: string ;
+  to?: string;
+  imgUrl?: string;
+  desc?: string;
 }
-const RankItem: React.FC<IPitem> = ({ name, to, num }) => {
+const RankItem: React.FC<IPitem> = ({
+  name = "我最帅",
+  to,
+  num,
+  imgUrl,
+  desc = "这是这首歌的描述"
+}) => {
   return (
-    <>
+    <div className="rank-item">
       <RankNum name={num} />
+      <img width="60px" height="60px" src={imgUrl} alt="" />
       <NavLink to={to}>
-        <RankTitle name={name} />
+        <RankTitle name={name} desc={desc} />
       </NavLink>
-    </>
+    </div>
   );
 };
 
-
-
-interface Props {
-  rankList?:[];
+interface IrankList {
+  id: number;
+  name: string;
+  picUrl: string;
+  mvId: number;
+  author: string;
 }
-const data = [
-  "Racing car sprays burning fuel into crowd.",
-  "Japanese princess to wed commoner.",
-  "Australian walks 100km after outback crash.",
-  "Man charged over missing wedding girl.",
-  "Los Angeles battles huge wildfires."
-];
-const RankList: React.FC<Props> = ({ rankList = data }) => {
+interface Props {
+  rankList?: IrankList[];
+  title?: string;
+}
+const RankList: React.FC<Props> = ({
+  rankList,
+  title = "音乐排行榜"
+}) => {
   return (
-    <div>
-      <h3 style={{ margin: "16px 0" }}>Large Size</h3>
-      <List
-        size="large"
-        header={<PlayListTitle name="音乐排行榜" />}
-        bordered={false}
-        split={true}
-        dataSource={rankList}
-        renderItem={(item, index) => (
-          <List.Item>
-            <RankItem name={item} num={index + 1} to="/test" />
-          </List.Item>
-        )}
-      />
-    </div>
+    <List
+      size="default"
+      header={<PlayListTitle name={title} />}
+      bordered={false}
+      split={true}
+      dataSource={rankList}
+      renderItem={(item, index) => (
+        <List.Item>
+          <RankItem
+            name={item.name}
+            num={index + 1}
+            to={"/song/" + item.id}
+            imgUrl={item.picUrl}
+            desc={item.author}
+          />
+        </List.Item>
+      )}
+    />
   );
 };
 export default RankList;

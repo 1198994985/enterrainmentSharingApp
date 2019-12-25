@@ -16,7 +16,6 @@
   .img-wrapper {
     position   : relative;
     overflow   : hidden;
-    padding-top: 50%;
     flex       : 1 0;
     height     : 200px;
     width      : 200px;
@@ -27,8 +26,6 @@
     .playList-img {
       position  : absolute;
       width     : 100%;
-      top       : 50%;
-      transform : translateY(-50%);
       // object-fit: cover;
     }
 
@@ -36,7 +33,23 @@
       transform: scale(1.07) translateZ(0);
     }
 
+  .play-icon {
+    position   : absolute;
+    left       : 50%;
+    top        : 50%;
+    font-size  : 47px;
+    color      : white;
+    user-select: none;
+    transform  : scale(1.00) translate(-50%, -50%);
+    opacity    : 0.0;
+    transition : all .3s;
+  }
 
+  .play-icon-over {
+    transform: scale(1.60) translate(-32%, -32%);
+    opacity  : 0.9;
+
+  }
 
   }
 
@@ -61,21 +74,5 @@
   justify-content: space-around;
   margin         : 0 80px;
 
-  .play-icon {
-    position   : absolute;
-    left       : 50%;
-    top        : 50%;
-    font-size  : 47px;
-    color:white;
-    user-select: none;
-    transform  : scale(1.00) translate(-50%, -50%);
-    opacity    : 0.0;
-    transition : all .3s;
-  }
 
-  .play-icon-over {
-    transform: scale(1.60) translate(-32%, -32%);
-    opacity  : 0.9;
-
-  }
 }

@@ -20,7 +20,7 @@ const HeaderSearch: React.FC<Props> = () => {
 };
 const content = (
   <div>
-    <p>Content</p>
+    <p>风</p>
     <p>Content</p>
   </div>
 );
@@ -36,7 +36,6 @@ const HomeHeader: React.FC<Props> = () => {
             enterButton="搜 索"
           />
         </div>
-
         <Popover content={content}  placement="bottomRight">
           <Avatar
             size="large"

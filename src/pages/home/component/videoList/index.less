@@ -1,4 +1,45 @@
-.vedio{
-  height:360px;
-  width:600px;
+@vediosHeight: 360px;
+
+
+
+.vediolist-wrapper {
+  display        : flex;
+  justify-content: flex-start;
+  flex           : 0 1 30;
+
+  .vedio {
+    height       : @vediosHeight;
+    margin       : 0 50px 0 100px;
+    box-shadow   : 0 3px 15px 1px;
+    border-radius: 5px;
+  }
+
+  .vedio-list {
+    display       : flex;
+    flex-direction: column;
+    width         : 50%;
+
+    .vedio-list-up,
+    .vedio-list-down {
+      display        : flex;
+      justify-content: space-around;
+      width          : 100%;
+
+      .playList-item {
+        height: 180px;
+
+        .img-wrapper {
+          width: 180px;
+          height:100px;
+          position: relative;
+          .playList-img {
+            height: 100%;
+            width: 100%;
+            border-radius: 5px;
+          }
+        }
+      }
+
+    }
+  }
 }

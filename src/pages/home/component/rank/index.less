@@ -1,41 +1,54 @@
 @import '../../../../global.less';
 
 .rank-num {
-  font-weight            : 500;
-  color                  : #ff183e;
-  font-size              : 26px;
-  margin-top             : -16px;
-  line-height            : 30px;
+  font-weight: 500;
+  font-size  : 26px;
+  margin     : 10px 30px 0;
+  line-height: 30px;
+
+}
+
+.rank-num-hot {
+  color: #ff183e;
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
   background-image       : @linearColor;
 }
 
-.rank-link {
-  margin: 5px 80px 0 20px;
+.rank-item {
+  display: flex;
+  overflow: hidden;
 
-  .rank-title {
-    font-size    : 18px;
-    font-weight  : 700;
-    line-height  : 24px;
-    text-overflow: ellipsis;
-    white-space  : nowrap;
+  .rank-link {
+    margin: 10px 80px 0 20px;
 
-    &:hover {
-      color: @themeColor;
+    .rank-title {
+      font-size    : 18px;
+      font-weight  : 700;
+      line-height  : 24px;
+      text-overflow: ellipsis;
+      white-space  : nowrap;
+      &:hover {
+        color: @themeColor;
+      }
     }
-  }
 
-  .rank-desc {
-    color    : #999;
-    font-size: 13px;
-  }
+    .rank-desc {
+      color    : #999;
+      font-size: 13px;
+    }
 
+  }
 }
-.ant-list{
+
+
+.ant-list {
   .ant-list-header {
-  border-bottom: none;
-}
+    border-bottom: none;
+  }
+
+  width:30%;
+
 }
 
 
