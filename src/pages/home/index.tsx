@@ -2,7 +2,13 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Slider from "../../component/slider/index";
 import rayTracing, { run } from "./rayTracing";
-import { HomeHeader, Nav } from "./component";
+import {
+  HomeHeader,
+  Nav,
+  PlayListHead,
+  RankList,
+  VedioList
+} from "./component";
 import { MusicCard, PlayList } from "../../component/";
 import "./index.less";
 interface Props {}
@@ -67,10 +73,20 @@ const Home: React.FC<Props> = () => {
         </audio> */}
       </div>
       <Nav />
+
+      <PlayListHead />
       <Slider speed={700}>
-    
         <PlayList />
       </Slider>
+      <VedioList />
+      {/* <Slider speed={700}>
+        <PlayList />
+      </Slider> */}
+
+      <div style={{ width: "500px" }}>
+        <RankList />
+      </div>
+     
     </>
   );
 };

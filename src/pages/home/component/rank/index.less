@@ -1,0 +1,57 @@
+@import '../../../../global.less';
+
+.rank-num {
+  font-weight            : 500;
+  color                  : #ff183e;
+  font-size              : 26px;
+  margin-top             : -16px;
+  line-height            : 30px;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-image       : @linearColor;
+}
+
+.rank-link {
+  margin: 5px 80px 0 20px;
+
+  .rank-title {
+    font-size    : 18px;
+    font-weight  : 700;
+    line-height  : 24px;
+    text-overflow: ellipsis;
+    white-space  : nowrap;
+
+    &:hover {
+      color: @themeColor;
+    }
+  }
+
+  .rank-desc {
+    color    : #999;
+    font-size: 13px;
+  }
+
+}
+.ant-list{
+  .ant-list-header {
+  border-bottom: none;
+}
+}
+
+
+.ant-list-items {
+  background-color: #F8F8F8;
+  padding         : 0 19px;
+  border          : none;
+  text-decoration : none;
+
+  a {
+
+    &:visited,
+    &:hover,
+    &:active {
+      text-decoration: none;
+    }
+  }
+
+}

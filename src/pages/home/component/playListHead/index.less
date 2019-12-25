@@ -1,0 +1,48 @@
+@import '../../../../global.less';
+
+@lineHeight: 32px;
+
+.playlist-tab {
+  margin     : 0 10px;
+  line-height: @lineHeight;
+  font-size  : 16px;
+
+}
+
+
+
+.playlist-title {
+  display    : inline-block;
+  height     : 40px;
+  margin     : 0 10px;
+  font-size  : 30px;
+  font-weight: 400;
+  line-height: 40px;
+  // white-space：now-wrap;
+}
+
+.playlist-head {
+  margin     : 0 20px 20px;
+  width      : 100%;
+  display    : flex;
+  align-items: center;
+
+
+  .playlist-tabs {
+    display : inline-block;
+    position: relative;
+    margin  : 5px 10px 0;
+
+    .playlist-nav-item {
+      cursor    : pointer;
+      text-align: center;
+      height    : @lineHeight;
+      margin    : 0 12px;
+
+      &:hover {
+        background: @linearColor;
+        color     : white;
+      }
+    }
+  }
+}

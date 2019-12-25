@@ -1,8 +1,6 @@
-import React from 'react'
-import './index.less'
-interface Props {
-  
-}
+import React from "react";
+import "./index.less";
+interface Props {}
 interface ILink {
   isWeight?: boolean;
 }
@@ -13,8 +11,30 @@ const NavLink: React.FC<ILink> = ({ children, isWeight = false }) => {
     </span>
   );
 };
-const NavItem: React.FC = ({ children }) => {
-  return <div className="nav-item">{children}</div>;
+
+interface INavItemProps {
+  className?: string;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseOver?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseOut?: (e: React.MouseEvent<HTMLDivElement>) => void;
+}
+export const NavItem: React.FC<INavItemProps> = ({
+  children,
+  className,
+  onClick,
+  onMouseOver,
+  onMouseOut
+}) => {
+  return (
+    <div
+      className={"nav-item " + className}
+      onClick={onClick}
+      onMouseOver={onMouseOver}
+      onMouseOut={onMouseOut}
+    >
+      {children}
+    </div>
+  );
 };
 const Nav: React.FC<Props> = () => {
   return (

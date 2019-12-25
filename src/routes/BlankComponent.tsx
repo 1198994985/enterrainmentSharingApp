@@ -9,3 +9,9 @@ const BlankComponent: React.FC<RouteConfigComponentProps> = ({ route }) => {
   return <>{renderRoutes(route.routes)}</>;
 };
 export default BlankComponent;
+
+export const test = () => {
+  return (
+    <>fengbozuishuai</>
+  )
+}
