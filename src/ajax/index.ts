@@ -3,7 +3,7 @@ import { message } from "antd";
 
 axios.defaults.withCredentials = true; // 跨域
 axios.defaults.baseURL = "https://musicapi.leanapp.cn/";
-const baseURL = "https://musicapi.leanapp.cn/"
+const baseURL = "https://musicapi.leanapp.cn/";
 // let instance = axios.create({
 //   baseURL: "https://music.163.com/",
 //   timeout: 2000,
@@ -91,12 +91,12 @@ const request = async (url: string, data = {}, type = "GET") => {
     }
     return promise.data;
   } catch (error) {
-    if (error && error.response) {
+    if (error?.response) {
       message.error(gainError(error.response.status));
     } else {
-      message.error(`Network Error ${error}`);
+      //  message.error(`Network Error ${error}`);
     }
-    if (error && error.response && String(error.response.status) === "401") {
+    if (error?.response && String(error.response.status) === "401") {
       return {
         status: "401"
       };
@@ -109,12 +109,31 @@ const request = async (url: string, data = {}, type = "GET") => {
  * 推荐歌单
  * @param count 获取数量
  */
-export const rqRmdSongList = (count: number = 10) =>
-  request(`/personalized?limit=${count}`, {}, "GET");
+export const rqRmdSongList = async (count: number = 10) => {
+  const data = await request(`/personalized?limit=${count}`, {}, "GET");
+  let list = [];
+  try {
+    if (data?.code === 200) {
+      let obj = data["result"];
+      for (let i in data["result"]) {
+        console.log(typeof obj[i]["id"]);
+        console.log(typeof obj[i]["playCount"]);
+        list.push({
+          id: obj[i]["id"],
+          name: obj[i]["name"],
+          picUrl: obj[i]["picUrl"],
+          playCount: obj[i]["playCount"]
+        });
+      }
+    }
+  } catch (error) {}
+
+  return list;
+};
+
 // export const tryLogin = (account:string, password:string) =>
 //   request("/login", { account, password }, "POST");
 // export const getMyInfo = () => request("/userinfo", {}, "GET");
-
 
 /**
  * 获取音乐 https://music.163.com/song/media/outer/url?id=id.mp3
@@ -126,7 +145,7 @@ export const rqMusicDesc = async (id: number | string) => {
   let list;
   const musicDetail = await request(`/song/detail?ids=${id}`, {}, "GET");
   try {
-    if (musicDetail && musicDetail.code == 200) {
+    if (musicDetail?.code == 200) {
       let rank = musicDetail["songs"][0];
       list = {
         id: rank["id"],
@@ -136,11 +155,10 @@ export const rqMusicDesc = async (id: number | string) => {
         picUrl: rank["al"]["picUrl"],
         publishTime: rank["publishTime"]
       };
-      console.log('rank', rank)
+      console.log("rank", rank);
     }
-  } catch (error) { }
-      return list;
-  
+  } catch (error) {}
+  return list;
 };
 /**
  * 获取mv的播放地址 描述 http://musicapi.leanapp.cn/mv/detail?mvid=10904989
@@ -154,7 +172,7 @@ export const rqTopList = async (count: number = 0) => {
   let list = [];
   const rankList = await request(`/top/list?idx=${count}`, {}, "GET");
   try {
-    if (rankList && rankList.code == 200) {
+    if (rankList?.code == 200) {
       let rank = rankList["playlist"]["tracks"];
       for (let i in rank) {
         list.push({
@@ -166,10 +184,8 @@ export const rqTopList = async (count: number = 0) => {
         });
       }
     }
-
-  } catch (error) { }
-    return list.slice(0, 10);
-  
+  } catch (error) {}
+  return list.slice(0, 10);
 };
 
 /**
@@ -180,7 +196,7 @@ export const rqMvList = async (count: number = 12) => {
   let list = [];
   const mvList = await request(`/top/mv?limit=${count}`, {}, "GET");
   try {
-    if (mvList && mvList.code == 200) {
+    if (mvList?.mvList.code == 200) {
       let rank = mvList["data"];
       for (let i in rank) {
         list.push({
@@ -193,7 +209,27 @@ export const rqMvList = async (count: number = 12) => {
         });
       }
     }
-  } catch (error) { }
-    return list;
-  
+  } catch (error) {}
+  return list;
+};
+/**
+ * 轮播图
+ */
+
+export const rqSliderImg = async (count: number = 0) => {
+  let list = [];
+  const mvList = await request(`/banner?type=${count}`, {}, "GET");
+  try {
+    if (mvList ?.mvList.code == 200) {
+      let banners = mvList["banners"];
+      for (let i in banners) {
+        list.push({
+          id: banners[i]["targetId"],
+          url: banners[i]["url"],
+          picUrl: banners[i]["picUrl"]
+        });
+      }
+    }
+  } catch (error) {}
+  return list;
 };

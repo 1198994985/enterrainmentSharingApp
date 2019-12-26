@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { withRouter } from "react-router-dom";
-import { match } from "react-router";
+import { withRouter, useParams } from "react-router-dom";
 import { Button, Rate } from "antd";
 import { Header, MarkAera } from "./component/";
 import { rqMusicDesc } from "../../ajax/";
 
 import "./index.less";
 
-interface Props {
-  match: match<{ id: string }>;
-}
 
 interface Idetail {
   id: number;
@@ -19,22 +15,22 @@ interface Idetail {
   picUrl: string;
   publishTime: number;
 }
-const MusicDetail: React.FC<Props> = ({ match }) => {
+const MusicDetail: React.FC = () => {
   const [id, setId] = useState<string>();
   const [songDetail, setSongDetail] = useState<Idetail>();
   const [playerVisiable, setplayerVisiable] = useState(false);
   const [songUrl, setSongUrl] = useState<string>();
-
+  const params = useParams<{id:string}>();
   useEffect(() => {
-    if (match) setId(match.params.id);
+    if (params) setId(params.id);
     (async () => {
-      const data = await rqMusicDesc(match.params.id);
+      const data = await rqMusicDesc(params.id);
       setSongDetail(data);
     })();
-  }, [id, match]);
+  }, [id, params]);
   const handelShare = () => {
     if (songDetail) {
-      const url = `http://service.weibo.com/share/share.php?appkey=&title=我正在听${songDetail?.name}&url=http://localhost:3000/song/${id}`;
+      const url = `http://service.weibo.com/share/share.php?appkey=&title=我正在听${songDetail?.name}&url=http://www.bobozuishuai.com.cn:8010/song/${id}`;
       window.open(url);
     }
   };

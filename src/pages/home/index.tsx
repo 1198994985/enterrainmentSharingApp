@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { withRouter, useHistory } from "react-router-dom";
 import Slider from "../../component/slider/index";
 // import rayTracing, { run } from "./rayTracing";
-import { rqRmdSongList, rqTopList } from "../../ajax/";
+import { rqRmdSongList, rqTopList, rqSliderImg } from "../../ajax/";
 import {
   HomeHeader,
   Nav,
@@ -9,8 +10,9 @@ import {
   RankList,
   VedioAera
 } from "./component";
-import {  PlayList } from "../../component/";
+import { PlayList } from "../../component/";
 import "./index.less";
+
 interface IrmdList {
   id: number;
   name: string;
@@ -24,93 +26,74 @@ interface IrankList {
   mvId: number;
   author: string;
 }
+interface IbannerListItem {
+  id: number;
+  picUrl: string;
+  url: string;
+}
+
 const Home: React.FC = () => {
-  const [rmdList, setRmdList] = useState<IrmdList[]>();
-  const [rankList, setRankList] = useState<IrankList[]>();
+  const [rmdList, setRmdList] = useState<IrmdList[][]>();
+  const [rankList, setRankList] = useState<IrankList[][]>();
+  const [bannerList, setBannerList] = useState<IbannerListItem[]>();
+  const history = useHistory();
 
   useEffect(() => {
     (async () => {
-      const data = await rqRmdSongList();
-      console.log("data ", data);
-      let list = [];
-      if (data && data.code === 200) {
-        let obj = data["result"];
-        for (let i in data["result"]) {
-          console.log(typeof obj[i]["id"]);
-          console.log(typeof obj[i]["playCount"]);
-          list.push({
-            id: obj[i]["id"],
-            name: obj[i]["name"],
-            picUrl: obj[i]["picUrl"],
-            playCount: obj[i]["playCount"]
-          });
-        }
-        setRmdList(list);
-      }
-
+      // TODO: PROMISE ALL
+      const rmdlist = await rqRmdSongList();
+      const rmd = [rmdlist?.slice(0, 5), rmdlist?.slice(5, 10)];
+      setRmdList(rmd);
       const rankList = await rqTopList(1);
       const rankList2 = await rqTopList(2);
       const rankList3 = await rqTopList(4);
-   
-      setRankList([...rankList,...rankList2,...rankList3]);
+      setRankList([rankList,rankList2, rankList3]);
+      const bannerlist = await rqSliderImg();
+      setBannerList(bannerlist);
     })();
     return () => {};
   }, []);
+
+  const handleBannerClick = useCallback(
+    (item: IbannerListItem) => {
+      const baseUrl = "https://music.163.com/#/";
+      if (item.url.indexOf("mv") !== -1) history.push(`/mv/${item.id}`);
+      else if (item.url.indexOf("song") !== -1)
+        history.push(`/song/${item.id}`);
+      else if (item.url.indexOf("dj") !== -1)
+        window.open(baseUrl + `dj?id=${item.id}`);
+      else if (item.url.indexOf("album") !== -1)
+        window.open(baseUrl + `album?id=${item.id}`);
+    },
+    [history]
+  );
   return (
     <>
       <HomeHeader></HomeHeader>
-      <div
-        style={{
-          height: "430px",
-          textAlign: "center"
-        }}
-      >
-        <Slider>
-          <div>
-            <img
-              style={{
-                display: "inline-block",
-                objectFit: "cover",
-                height: "100%",
-                width: "100%",
-                margin: "0 auto",
-                boxShadow: "0 0 70px 2px black inset"
-              }}
-              src="http://p1.music.126.net/OFAOnivvC4EYgM4WXehwNA==/109951164574182616.jpg?imageView&quality=89"
-              draggable="false"
-              alt=""
-            />
-          </div>
-          <div
-            className="slider-image-wrapper"
-            style={{
-              backgroundImage:
-                "url(http://liangcang-material.alicdn.com/prod/upload/8b02bd156a4041f88384013167ff0833.jpg?x-oss-process=image/resize,w_1664/interlace,1/quality,Q_80/sharpen,100)"
-            }}
-          >
-            <div className="slider-image"></div>
-          </div>
-          <div
-            className="slider-image-wrapper"
-            style={{
-              backgroundImage:
-                "url(http://p1.music.126.net/OFAOnivvC4EYgM4WXehwNA==/109951164574182616.jpg?imageView&quality=89)"
-            }}
-          >
-            <div className="slider-image"></div>
-          </div>
+      <div className="home-banner">
+        <Slider speed={500}>
+          {bannerList &&
+            bannerList.map(item => {
+              return (
+                <img
+                  className="banner-img"
+                  src={item.picUrl}
+                  draggable="false"
+                  alt=""
+                  onClick={() => handleBannerClick(item)}
+                  key={item.id}
+                />
+              );
+            })}
         </Slider>
       </div>
       <Nav />
       <PlayListHead />
       <Slider speed={700}>
-        <PlayList imgUrlList={rmdList && rmdList?.slice(0, 5)} />
-        <PlayList imgUrlList={rmdList && rmdList?.slice(5, 10)} />
+        <PlayList imgUrlList={rmdList && rmdList[0]} />
+        <PlayList imgUrlList={rmdList && rmdList[1]} />
       </Slider>
       <VedioAera />
-      {/* <Slider speed={700}>
-        <PlayList />
-      </Slider> */}
       <div
         style={{
           width: "100%",
@@ -119,14 +102,12 @@ const Home: React.FC = () => {
           margin: "0 30px"
         }}
       >
-        <RankList rankList={rankList?.slice(0, 10)} title="云音乐新歌榜" />
-        <RankList rankList={rankList?.slice(10, 20)} title="网易原创歌曲榜" />
-        <RankList rankList={rankList?.slice(20, 30)} title="云音乐飙升榜" />
-        {/* <RankList />
-        <RankList /> */}
+        <RankList rankList={rankList && rankList[0]} title="云音乐新歌榜" />
+        <RankList rankList={rankList && rankList[1]} title="网易原创歌曲榜" />
+        <RankList rankList={rankList && rankList[2]} title="云音乐飙升榜" />
       </div>
     </>
   );
 };
 
-export default Home;
+export default withRouter(React.memo(Home));
