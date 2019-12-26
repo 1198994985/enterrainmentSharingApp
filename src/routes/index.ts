@@ -1,6 +1,6 @@
 import { RouteConfig } from "react-router-config";
 import BlankComponent, { test } from "./BlankComponent";
-import { Home } from "../pages";
+import { Home, MusicDetail } from "../pages";
 import { MusicCard, PlayList } from "./../component/";
 
 
@@ -12,12 +12,12 @@ const routesConfig: RouteConfig[] = [
       {
         path: "/",
         component: Home,
-        exact:true,
+        exact: true,
         routes: []
       },
       {
         path: "/song/:id",
-        component: test,
+        component: MusicDetail,
         routes: []
       }
     ]

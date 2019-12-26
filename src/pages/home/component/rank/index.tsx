@@ -83,7 +83,7 @@ const RankList: React.FC<Props> = ({
             name={item.name}
             num={index + 1}
             to={"/song/" + item.id}
-            imgUrl={item.picUrl}
+            imgUrl={item.picUrl + "?param=60x60"}
             desc={item.author}
           />
         </List.Item>

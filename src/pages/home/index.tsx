@@ -1,7 +1,6 @@
-/* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Slider from "../../component/slider/index";
-import rayTracing, { run } from "./rayTracing";
+// import rayTracing, { run } from "./rayTracing";
 import { rqRmdSongList, rqTopList } from "../../ajax/";
 import {
   HomeHeader,
@@ -10,7 +9,7 @@ import {
   RankList,
   VedioAera
 } from "./component";
-import { MusicCard, PlayList } from "../../component/";
+import {  PlayList } from "../../component/";
 import "./index.less";
 interface IrmdList {
   id: number;
@@ -80,6 +79,7 @@ const Home: React.FC = () => {
               }}
               src="http://p1.music.126.net/OFAOnivvC4EYgM4WXehwNA==/109951164574182616.jpg?imageView&quality=89"
               draggable="false"
+              alt=""
             />
           </div>
           <div

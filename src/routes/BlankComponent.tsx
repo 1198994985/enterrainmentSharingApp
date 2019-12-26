@@ -6,6 +6,7 @@ import {
 
 const BlankComponent: React.FC<RouteConfigComponentProps> = ({ route }) => {
   // @ts-ignore
+  // console.log(route);
   return <>{renderRoutes(route.routes)}</>;
 };
 export default BlankComponent;
