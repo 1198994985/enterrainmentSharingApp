@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-// import rayTracing, { run } from "./rayTracing";
-import { Header } from "./component/";
-import { rqMusicDesc } from "../../ajax/";
-
 import { withRouter } from "react-router-dom";
 import { match } from "react-router";
 import { Button, Rate } from "antd";
+import { Header, MarkAera } from "./component/";
+import { rqMusicDesc } from "../../ajax/";
+
 import "./index.less";
 
 interface Props {
   match: match<{ id: string }>;
 }
 
-interface Idetail{
+interface Idetail {
   id: number;
   author: string;
   authorId: number;
@@ -23,19 +22,33 @@ interface Idetail{
 const MusicDetail: React.FC<Props> = ({ match }) => {
   const [id, setId] = useState<string>();
   const [songDetail, setSongDetail] = useState<Idetail>();
+  const [playerVisiable, setplayerVisiable] = useState(false);
+  const [songUrl, setSongUrl] = useState<string>();
+
   useEffect(() => {
     if (match) setId(match.params.id);
     (async () => {
       const data = await rqMusicDesc(match.params.id);
-      console.log("publishTime", data && data.publishTime);
       setSongDetail(data);
-    })()
-  }, [match]);
+    })();
+  }, [id, match]);
+  const handelShare = () => {
+    if (songDetail) {
+      const url = `http://service.weibo.com/share/share.php?appkey=&title=我正在听${songDetail?.name}&url=http://localhost:3000/song/${id}`;
+      window.open(url);
+    }
+  };
+  const handlePlay = async () => {
+    setplayerVisiable(true);
+    if (id) {
+      setSongUrl(`https://music.163.com/song/media/outer/url?id=${id}.mp3`);
+    }
+  };
   return (
-    <div className="music-page">
+    <div className="music-page ">
       <Header />
-      <div className="main">
-        <div className="music-desc-wrapper">
+      <div className="main  card-white">
+        <div className="music-desc-wrapper ">
           <img
             className="music-pic"
             src={songDetail && songDetail.picUrl + "?param=250x250"}
@@ -43,15 +56,19 @@ const MusicDetail: React.FC<Props> = ({ match }) => {
           />
           <section className="music-desc">
             <h2 className="music-name ">{songDetail && songDetail.name}</h2>
-            <div className="author">歌手:{songDetail && songDetail.author}</div>
             <div className="author">
-              发行时间:{songDetail && songDetail.publishTime}
+              歌手: {songDetail && songDetail.author}
+            </div>
+            <div className="author">
+              发行时间: {songDetail && songDetail.publishTime}
             </div>
             <div className="button">
-              <Button type="primary">▶ 播放</Button>
+              <Button type="primary" onClick={handlePlay}>
+                ▶ 播放
+              </Button>
               <Button>❤ 收藏</Button>
               <Button>💬 评论</Button>
-              <Button>🔗 分享</Button>
+              <Button onClick={handelShare}>🔗 分享到微博</Button>
             </div>
             {/* <Button type="primary">Primary</Button>
             <Button type="link">Link</Button>
@@ -63,7 +80,7 @@ const MusicDetail: React.FC<Props> = ({ match }) => {
 
           <Rate />
         </div>
-        <div className="lyric">
+        <div className="lyric card-white">
           <h1> 歌词</h1>
           <pre>
             {`如果真的我想要 - 黄旭
@@ -100,7 +117,13 @@ Welcome welcome welcome to the
 `}
           </pre>
         </div>
+        <MarkAera />
       </div>
+      {playerVisiable && (
+        <audio controls={true} className="player">
+          <source src={songUrl} type="audio/mpeg" />
+        </audio>
+      )}
     </div>
   );
 };

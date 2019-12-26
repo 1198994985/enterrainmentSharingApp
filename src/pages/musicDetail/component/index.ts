@@ -1,4 +1,4 @@
 import Header from "./head";
-export {
-  Header,
-};
+import MarkAera from "./mark";
+
+export { Header, MarkAera };

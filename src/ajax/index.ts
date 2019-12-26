@@ -3,7 +3,12 @@ import { message } from "antd";
 
 axios.defaults.withCredentials = true; // 跨域
 axios.defaults.baseURL = "https://musicapi.leanapp.cn/";
+const baseURL = "https://musicapi.leanapp.cn/"
+// let instance = axios.create({
+//   baseURL: "https://music.163.com/",
+//   timeout: 2000,
 
+// });
 let whiteList = ["/login", "/register"];
 
 const gainError = (status: number) => {
@@ -109,12 +114,13 @@ export const rqRmdSongList = (count: number = 10) =>
 // export const tryLogin = (account:string, password:string) =>
 //   request("/login", { account, password }, "POST");
 // export const getMyInfo = () => request("/userinfo", {}, "GET");
-/**
- * 获取歌曲详情 /song/detail?ids=347230
- */
+
 
 /**
  * 获取音乐 https://music.163.com/song/media/outer/url?id=id.mp3
+ */
+/**
+ * 获取歌曲详情 /song/detail?ids=347230
  */
 export const rqMusicDesc = async (id: number | string) => {
   let list;

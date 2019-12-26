@@ -10,8 +10,12 @@ const HeaderSearch: React.FC<Props> = () => {
       <Search
         placeholder="input search text"
         size="default"
-        onSearch={value => console.log(value)}
         enterButton="搜 索"
+        onSearch={value => {
+          window.open(
+            `https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w=${value}`
+          );
+        }}
       />
     </div>
   );

@@ -71,7 +71,6 @@ const Home: React.FC = () => {
               style={{
                 display: "inline-block",
                 objectFit: "cover",
-
                 height: "100%",
                 width: "100%",
                 margin: "0 auto",
@@ -101,16 +100,8 @@ const Home: React.FC = () => {
             <div className="slider-image"></div>
           </div>
         </Slider>
-
-        {/* <audio controls={true}>
-          <source
-            src="https://music.163.com/song/media/outer/url?id=33894312.mp3"
-            type="audio/mpeg"
-          />
-        </audio> */}
       </div>
       <Nav />
-
       <PlayListHead />
       <Slider speed={700}>
         <PlayList imgUrlList={rmdList && rmdList?.slice(0, 5)} />
@@ -120,7 +111,6 @@ const Home: React.FC = () => {
       {/* <Slider speed={700}>
         <PlayList />
       </Slider> */}
-
       <div
         style={{
           width: "100%",
@@ -132,7 +122,6 @@ const Home: React.FC = () => {
         <RankList rankList={rankList?.slice(0, 10)} title="云音乐新歌榜" />
         <RankList rankList={rankList?.slice(10, 20)} title="网易原创歌曲榜" />
         <RankList rankList={rankList?.slice(20, 30)} title="云音乐飙升榜" />
-
         {/* <RankList />
         <RankList /> */}
       </div>
