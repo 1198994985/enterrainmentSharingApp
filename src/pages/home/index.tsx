@@ -47,7 +47,7 @@ const Home: React.FC = () => {
       const rankList = await rqTopList(1);
       const rankList2 = await rqTopList(2);
       const rankList3 = await rqTopList(4);
-      setRankList([rankList,rankList2, rankList3]);
+      setRankList([rankList, rankList2, rankList3]);
       const bannerlist = await rqSliderImg();
       setBannerList(bannerlist);
     })();
@@ -77,34 +77,38 @@ const Home: React.FC = () => {
               return (
                 <img
                   className="banner-img"
-                  src={item.picUrl}
+                  src={item.picUrl + "?param=1600x622"}
                   draggable="false"
                   alt=""
                   onClick={() => handleBannerClick(item)}
                   key={item.id}
                 />
               );
-            })}
+            })
+            }
         </Slider>
       </div>
-      <Nav />
-      <PlayListHead />
-      <Slider speed={700}>
-        <PlayList imgUrlList={rmdList && rmdList[0]} />
-        <PlayList imgUrlList={rmdList && rmdList[1]} />
-      </Slider>
-      <VedioAera />
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-around",
-          margin: "0 30px"
-        }}
-      >
-        <RankList rankList={rankList && rankList[0]} title="云音乐新歌榜" />
-        <RankList rankList={rankList && rankList[1]} title="网易原创歌曲榜" />
-        <RankList rankList={rankList && rankList[2]} title="云音乐飙升榜" />
+      <div className="home-container" >
+        <Nav />
+        <PlayListHead />
+        <Slider speed={700}>
+          <PlayList imgUrlList={rmdList && rmdList[0]} />
+          <PlayList imgUrlList={rmdList && rmdList[1]} />
+        </Slider>
+        <VedioAera />
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-around",
+            margin: "0 auto",
+            maxWidth:"1500px"
+          }}
+        >
+          <RankList rankList={rankList && rankList[0]} title="云音乐新歌榜" />
+          <RankList rankList={rankList && rankList[1]} title="网易原创歌曲榜" />
+          <RankList rankList={rankList && rankList[2]} title="云音乐飙升榜" />
+        </div>
       </div>
     </>
   );

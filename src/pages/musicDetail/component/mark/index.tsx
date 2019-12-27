@@ -7,10 +7,11 @@ import {
   Avatar,
   Form,
   Button,
-  Input
+  Input,
+  Card
 } from "antd";
 import moment from "moment";
-import './index.less'
+import "./index.less";
 
 const { TextArea } = Input;
 
@@ -63,7 +64,7 @@ class MarkAera extends React.Component {
         value: "",
         comments: [
           {
-            author: "Han Solo",
+            author: "xxx",
             avatar:
               "https://tvax3.sinaimg.cn/crop.0.0.996.996.180/006N18DEly8g9fuv61xm0j30ro0ro40f.jpg?KID=imgbed,tva&Expires=1577102993&ssig=FJjqh7zXKG",
             content: <p>{this.state.value}</p>,
@@ -84,7 +85,10 @@ class MarkAera extends React.Component {
     const { comments, submitting, value } = this.state;
 
     return (
-      <div className="mark-aera  card-white">
+      // <div className="mark-aera  card-white">
+
+      // </div>
+      <Card size="small" title="💬 评论" style={{ marginTop: 5, width: "100%" ,borderRadius:8}}>
         <Comment
           avatar={
             <Avatar
@@ -102,7 +106,7 @@ class MarkAera extends React.Component {
           }
         />
         {comments.length > 0 && <CommentList comments={comments} />}
-      </div>
+      </Card>
     );
   }
 }

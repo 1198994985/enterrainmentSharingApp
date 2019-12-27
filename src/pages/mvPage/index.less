@@ -1,0 +1,64 @@
+.mv-page {
+  position        : relative;
+  overflow        : hidden;
+  min-height      : 1300px;
+  background-color: rgb(247, 247, 247);
+
+  .main {
+    position  : relative;
+    display   : flex;
+
+    max-width : 1020px;
+    min-width : 600px;
+    margin    : 0 auto;
+    margin-top: 80px;
+
+    .mv-wrapper {
+      width:70%;
+      margin-right: 20px;
+      .mv {
+        .mv-title {
+          display: flex;
+          h1 {
+            margin-bottom: 10px;
+
+            font-weight  : 550;
+            font-size    : 22px;
+          }
+        }
+        .vedio {
+          height          : 400px;
+          width           : 707px;
+          box-sizing      : border-box;
+          border-radius   : 5px;
+          box-shadow      : 0 2px 1px 1px;
+
+        }
+      }
+      .mv-button {
+        margin: 20px 0 30px;
+        &:nth-child(1) {
+          width: 60px;
+        }
+        .ant-btn {
+          margin-right: 15px;
+          height      : 38px;
+        }
+      }
+    }
+    .mv-sider{
+      width:30%;
+      margin:42px 5px;
+      p {
+        margin-top: 3px;
+      }
+      .ant-card-bordered{
+        border:none;
+      }
+      .ant-card-head-title{
+        font-weight: 500;
+      }
+    }
+
+  }
+}

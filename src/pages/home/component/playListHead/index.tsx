@@ -58,7 +58,7 @@ interface IPLHead {}
 const PlayListHead: React.FC<IPLHead> = ({children}) => {
   return (
     <div className="playlist-head">
-      <PlayListTitle name="今日热门" />
+      <PlayListTitle name="歌单推荐" />
       <div className="playlist-tabs">
         {children}
       </div>

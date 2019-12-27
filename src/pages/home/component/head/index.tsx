@@ -30,13 +30,17 @@ const HomeHeader: React.FC<Props> = () => {
       <div className="header-inner">
         <div className="header-search">
           <Search
-            placeholder="input search text"
+            placeholder="请输入想要搜索的音乐"
             size="large"
-            onSearch={value => console.log(value)}
+            onSearch={value => {
+              window.open(
+                `https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w=${value}`
+              );
+            }}
             enterButton="搜 索"
           />
         </div>
-        <Popover content={content}  placement="bottomRight">
+        <Popover content={content} placement="bottomRight">
           <Avatar
             size="large"
             alt="User"

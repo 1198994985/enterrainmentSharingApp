@@ -6,6 +6,8 @@ interface Props {
   imgUrl?: string;
   path?: string;
   onClick?: (e: React.MouseEvent) => any;
+  name?: string;
+  desc?: string;
 }
 
 interface urlList {
@@ -15,7 +17,13 @@ interface urlList {
   playCount: number;
 }
 
-const MusicCard: React.FC<Props> = ({ imgUrl, path, onClick }) => {
+const MusicCard: React.FC<Props> = ({
+  imgUrl,
+  path,
+  onClick,
+  name = "名称",
+  desc = "这是它的描述"
+}) => {
   const [isPlayIconOpacity, setPlayIconOpacity] = useState(true);
   const handleMouseOver = () => {
     setPlayIconOpacity(false);
@@ -45,8 +53,8 @@ const MusicCard: React.FC<Props> = ({ imgUrl, path, onClick }) => {
         </Link>
       </div>
       <span className="music-item-title">
-        <div className="music-item-name">fengbozuishuai</div>
-        <div className="music-item-desc">fengbozuishuai</div>
+        <div className="music-item-desc">{desc}</div>
+        <div className="music-item-name">{name}</div>
       </span>
     </div>
   );
@@ -57,7 +65,15 @@ export const PlayList: React.FC<Props> = ({ imgUrlList }) => {
     <div className="playList">
       {imgUrlList &&
         imgUrlList.map((item, index) => {
-          return <MusicCard imgUrl={item.picUrl} key={item.id} path={"/song/" +item.id} />;
+          return (
+            <MusicCard
+              imgUrl={item.picUrl + "?param=230x230"}
+              key={item.id}
+              path={"/song/" + item.id}
+              name={item.name}
+              desc={"播放总数 :" + item.playCount}
+            />
+          );
         })}
     </div>
   );

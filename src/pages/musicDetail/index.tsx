@@ -6,7 +6,6 @@ import { rqMusicDesc } from "../../ajax/";
 
 import "./index.less";
 
-
 interface Idetail {
   id: number;
   author: string;
@@ -20,14 +19,18 @@ const MusicDetail: React.FC = () => {
   const [songDetail, setSongDetail] = useState<Idetail>();
   const [playerVisiable, setplayerVisiable] = useState(false);
   const [songUrl, setSongUrl] = useState<string>();
-  const params = useParams<{id:string}>();
+  const params = useParams<{ id: string }>();
   useEffect(() => {
     if (params) setId(params.id);
     (async () => {
       const data = await rqMusicDesc(params.id);
       setSongDetail(data);
     })();
-  }, [id, params]);
+    setTimeout(() => {
+      let a = document.getElementById("root");
+      if (a) a.scrollIntoView({ block: "start", behavior: "auto" });
+    }, 0);
+  }, [params]);
   const handelShare = () => {
     if (songDetail) {
       const url = `http://service.weibo.com/share/share.php?appkey=&title=我正在听${songDetail?.name}&url=http://www.bobozuishuai.com.cn:8010/song/${id}`;
@@ -43,21 +46,17 @@ const MusicDetail: React.FC = () => {
   return (
     <div className="music-page ">
       <Header />
-      <div className="main  card-white">
+      <div className="main">
         <div className="music-desc-wrapper ">
           <img
             className="music-pic"
-            src={songDetail && songDetail.picUrl + "?param=250x250"}
+            src={songDetail?.picUrl + "?param=250x250"}
             alt=""
           />
           <section className="music-desc">
-            <h2 className="music-name ">{songDetail && songDetail.name}</h2>
-            <div className="author">
-              歌手: {songDetail && songDetail.author}
-            </div>
-            <div className="author">
-              发行时间: {songDetail && songDetail.publishTime}
-            </div>
+            <h2 className="music-name ">🎵{songDetail && songDetail.name}</h2>
+            <div className="author">🎤歌 手: {songDetail?.author}maikef</div>
+            <div className="author">🕔发行时间: {songDetail?.publishTime}</div>
             <div className="button">
               <Button type="primary" onClick={handlePlay}>
                 ▶ 播放
@@ -66,12 +65,6 @@ const MusicDetail: React.FC = () => {
               <Button>💬 评论</Button>
               <Button onClick={handelShare}>🔗 分享到微博</Button>
             </div>
-            {/* <Button type="primary">Primary</Button>
-            <Button type="link">Link</Button>
-            <Button type="primary" shape="circle" icon="search" />
-            <Button type="primary" shape="circle">
-              A
-            </Button> */}
           </section>
 
           <Rate />

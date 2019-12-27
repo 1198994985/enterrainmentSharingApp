@@ -116,8 +116,6 @@ export const rqRmdSongList = async (count: number = 10) => {
     if (data?.code === 200) {
       let obj = data["result"];
       for (let i in data["result"]) {
-        console.log(typeof obj[i]["id"]);
-        console.log(typeof obj[i]["playCount"]);
         list.push({
           id: obj[i]["id"],
           name: obj[i]["name"],
@@ -127,7 +125,6 @@ export const rqRmdSongList = async (count: number = 10) => {
       }
     }
   } catch (error) {}
-
   return list;
 };
 
@@ -155,7 +152,6 @@ export const rqMusicDesc = async (id: number | string) => {
         picUrl: rank["al"]["picUrl"],
         publishTime: rank["publishTime"]
       };
-      console.log("rank", rank);
     }
   } catch (error) {}
   return list;
@@ -163,7 +159,27 @@ export const rqMusicDesc = async (id: number | string) => {
 /**
  * 获取mv的播放地址 描述 http://musicapi.leanapp.cn/mv/detail?mvid=10904989
  */
-
+export const rqMvUrl = async (id: number | string) => {
+  let res;
+  const mvDetail = await request(`/mv/detail?mvid=${id}`, {}, "GET");
+  try {
+    if (mvDetail?.code == 200) {
+      let data = mvDetail.data;
+      res = {
+        name: data["name"],
+        desc: data["desc"],
+        picUrl: data["cover"],
+        mvUrl: data["brs"],
+        publishTime: data["publishTime"],
+        playCount: data["playCount"],
+        artistId: data["artistId"],
+        artistName: data["artistName"]
+      };
+    }
+  } catch (error) {}
+  return res;
+  
+};
 /**
  * 获取歌曲榜单
  * @param count 榜单
@@ -196,7 +212,7 @@ export const rqMvList = async (count: number = 12) => {
   let list = [];
   const mvList = await request(`/top/mv?limit=${count}`, {}, "GET");
   try {
-    if (mvList?.mvList.code == 200) {
+    if (mvList?.code == 200) {
       let rank = mvList["data"];
       for (let i in rank) {
         list.push({
@@ -220,7 +236,7 @@ export const rqSliderImg = async (count: number = 0) => {
   let list = [];
   const mvList = await request(`/banner?type=${count}`, {}, "GET");
   try {
-    if (mvList ?.mvList.code == 200) {
+    if (mvList?.code == 200) {
       let banners = mvList["banners"];
       for (let i in banners) {
         list.push({
@@ -231,5 +247,15 @@ export const rqSliderImg = async (count: number = 0) => {
       }
     }
   } catch (error) {}
+
   return list;
 };
+/**
+ * /mv/first?limit=10
+ * 最新MV
+ */
+
+ /**
+ * /personalized/mv
+ * 推荐MV
+ */

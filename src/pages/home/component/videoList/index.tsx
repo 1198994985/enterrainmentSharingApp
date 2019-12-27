@@ -5,17 +5,12 @@ import { rqMvList } from "../../../../ajax/";
 import { withRouter } from "react-router-dom";
 import "./index.less";
 
-
 interface Props {
   vedioUrl?: string;
   vedioList?: IvedioUrl[];
 }
 const defaultUrl = `http://vodkgeyttp8.vod.126.net/cloudmusic/obj/core/632873387/4db28fdf08f3f1e6aee1c3a19575316e.mp4?wsSecret=1b3d1e4d9caee09b0e0199088ccb8d26&wsTime=1577284797`;
 const VedioList: React.FC<Props> = React.memo(props => {
-  const handleCilck = () => {
-    //@ts-ignore
-    props.history.push("/song/1");
-  };
   const { vedioUrl = defaultUrl, vedioList } = props;
   return (
     <>
@@ -28,9 +23,11 @@ const VedioList: React.FC<Props> = React.memo(props => {
                 if (index < 3) {
                   return (
                     <MusicCard
-                      imgUrl={item.picUrl}
+                      imgUrl={item.picUrl + "?param=180x150"}
                       key={item.id}
-                      path={"/song/" + item.id}
+                      path={"/mv/" + item.id}
+                      name={item.author}
+                      desc={item.name}
                     />
                   );
                 }
@@ -45,8 +42,11 @@ const VedioList: React.FC<Props> = React.memo(props => {
                     <MusicCard
                       imgUrl={item.picUrl}
                       key={item.id}
-                      path={"/song/" + item.id}
+                      path={"/mv/" + item.id}
+                      name={item.author}
+                      desc={item.name}
                     />
+
                   );
                 }
                 return null;
@@ -57,12 +57,7 @@ const VedioList: React.FC<Props> = React.memo(props => {
     </>
   );
 });
-//  id: rank[i]["id"],
-//       name: rank[i]["name"],
-//       author: rank[i]["artistName"],
-//       authorId: rank[i]["artistId"],
-//       picUrl: rank[i]["al"]["cover"],
-//       playCount: rank[i]["playCount"]
+
 interface IvedioUrl {
   id: number;
   name: string;
@@ -71,7 +66,7 @@ interface IvedioUrl {
   picUrl: string;
   playCount: number;
 }
-const talName = ["今日推荐", "xxx","xxxx","xxxx"];
+const talName = ["mv", "内地", "港台", "欧美"];
 const VedioAera: React.FC<Props> = React.memo(() => {
   const [VedioUrl, setVedioUrl] = useState<IvedioUrl[][]>();
   const [VedioUrlIndex, setVedioUrlIndex] = useState<number>(0);
@@ -79,15 +74,14 @@ const VedioAera: React.FC<Props> = React.memo(() => {
     (async () => {
       const data = await rqMvList(18);
       setVedioUrl([data.slice(0, 6), data.slice(6, 12), data.slice(12, 18)]);
-      // console.log("VedioUrl", VedioUrl && VedioUrl.length);
     })();
-  }, [VedioUrl]);
- 
+  }, []);
+
   return (
     <div>
       <PlayListHead>
         {talName.map((item, index) => {
-          if (index < (VedioUrl && VedioUrl.length || 3)) {
+          if (index < ((VedioUrl && VedioUrl.length) || 3)) {
             return (
               <PlayListTab
                 name={item}
@@ -101,7 +95,7 @@ const VedioAera: React.FC<Props> = React.memo(() => {
           return null;
         })}
       </PlayListHead>
-      <VedioList vedioList={VedioUrl  && VedioUrl[VedioUrlIndex]} />
+      <VedioList vedioList={VedioUrl && VedioUrl[VedioUrlIndex]} />
     </div>
   );
 });
