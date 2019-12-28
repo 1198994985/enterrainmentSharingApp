@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { withRouter, useParams } from "react-router-dom";
-import { Button, Icon, Card } from "antd";
-import { Header, MarkAera } from "../musicDetail/component/";
-import { rqMvUrl } from "../../ajax/";
+import { Button, Icon, Card,Upload, message } from "antd";
+import { Header, MarkAera,  } from "../musicDetail/component/";
+import { rqMvUrl, rqMark } from "../../ajax/";
 
 import "./index.less";
 
@@ -22,11 +22,15 @@ const MvPage: React.FC = () => {
   const [id, setId] = useState<string>();
   const [mvDetail, setMvDetail] = useState<Idetail>();
   const [mvUrl, setMvUrl] = useState<string>();
+  const [mark, setMark] = useState<[]>();
   const params = useParams<{ id: string }>();
   useEffect(() => {
     if (params) setId(params.id);
     (async () => {
       const data = await rqMvUrl(params.id);
+      const tempMark = await rqMark(params.id, 1);
+      // @ts-ignore
+      tempMark && setMark(tempMark);
       if (data) {
         setMvDetail(data);
         if (data.hasOwnProperty("mvUrl")) {
@@ -44,9 +48,11 @@ const MvPage: React.FC = () => {
       if (a) a.scrollIntoView({ block: "start", behavior: "auto" });
     }, 0);
   }, [params]);
+ 
   const handelShare = () => {
     if (mvDetail) {
-      const url = `http://service.weibo.com/share/share.php?appkey=&title=我正在听${mvDetail?.name}http://www.bobozuishuai.com.cn:8010/song/${id}`;
+      const content = `${mvDetail.artistName},我正在听《${mvDetail?.name}》@SuperLuckyBo,http://www.bobozuishuai.com.cn/mv/${id}`;
+      const url = `http://service.weibo.com/share/share.php?appkey=&title=${content}`;
       window.open(url);
     }
   };
@@ -73,7 +79,11 @@ const MvPage: React.FC = () => {
             <Button>💬 评论</Button>
             <Button onClick={handelShare}>🔗 分享到微博</Button>
           </div>
-          <MarkAera />
+
+          {
+            //@ts-ignore
+            <MarkAera mark={mark || []} />
+          }
         </div>
         <div className="mv-sider">
           {/* <div className="mv-desc card-white"></div> */}
@@ -109,8 +119,9 @@ const MvPage: React.FC = () => {
           </Card>
         </div>
       </div>
+
     </div>
   );
 };
 
-export default withRouter(MvPage);
+export default withRouter(React.memo(MvPage));

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { withRouter, useParams } from "react-router-dom";
 import { Button, Rate } from "antd";
 import { Header, MarkAera } from "./component/";
-import { rqMusicDesc } from "../../ajax/";
+import { rqMusicDesc, rqMark } from "../../ajax/";
 
 import "./index.less";
 
@@ -19,12 +19,16 @@ const MusicDetail: React.FC = () => {
   const [songDetail, setSongDetail] = useState<Idetail>();
   const [playerVisiable, setplayerVisiable] = useState(false);
   const [songUrl, setSongUrl] = useState<string>();
+  const [mark, setMark] = useState<[]>();
   const params = useParams<{ id: string }>();
   useEffect(() => {
     if (params) setId(params.id);
     (async () => {
       const data = await rqMusicDesc(params.id);
       setSongDetail(data);
+      const tempMark = await rqMark(params.id, 0);
+      // @ts-ignore
+      tempMark && setMark(tempMark);
     })();
     setTimeout(() => {
       let a = document.getElementById("root");
@@ -106,7 +110,10 @@ Welcome welcome welcome to the
 `}
           </pre>
         </div>
-        <MarkAera />
+        {
+          //@ts-ignore
+          <MarkAera mark={mark || []} />
+        }
       </div>
       {playerVisiable && (
         <audio controls={true} className="player">

@@ -178,7 +178,6 @@ export const rqMvUrl = async (id: number | string) => {
     }
   } catch (error) {}
   return res;
-  
 };
 /**
  * 获取歌曲榜单
@@ -255,7 +254,40 @@ export const rqSliderImg = async (count: number = 0) => {
  * 最新MV
  */
 
- /**
+/**
  * /personalized/mv
  * 推荐MV
  */
+
+/**
+ * 获取评论
+ */
+export const rqMark = async (
+  id: string | number,
+  type: "0" | "1" | 0 | 1 = 0
+) => {
+  const res = await request(
+    `http://localhost:3003/mvmark?id=${id}&type=${type}`,
+    {},
+    "GET"
+  );
+  if (res?.success) {
+    let result = [];
+
+    for (let i in res.data) {
+      let data = res.data[i];
+
+      result.push({
+        id: data.id,
+        author: data.from_id,
+        content: data.msg,
+        datetime: data.time,
+        avatar:
+          "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+      });
+    }
+    return result;
+  } else {
+    return undefined;
+  }
+};

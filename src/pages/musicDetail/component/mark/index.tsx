@@ -41,14 +41,25 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
     </Form.Item>
   </div>
 );
+interface ImarkProps {
+  mark: markItem[] | undefined;
+}
 
-class MarkAera extends React.Component {
+export interface markItem {
+  id: string | number;
+  author:string;
+  content:string;
+  datetime: string;
+  avater: string;
+}
+
+class MarkAera extends React.PureComponent<> {
   state = {
     comments: [],
     submitting: false,
     value: ""
   };
-
+ 
   handleSubmit = () => {
     if (!this.state.value) {
       return;
@@ -83,12 +94,18 @@ class MarkAera extends React.Component {
 
   render() {
     const { comments, submitting, value } = this.state;
-
+    const { mark } = this.props;
+    
+    console.log('mark', mark)
     return (
       // <div className="mark-aera  card-white">
 
       // </div>
-      <Card size="small" title="💬 评论" style={{ marginTop: 5, width: "100%" ,borderRadius:8}}>
+      <Card
+        size="small"
+        title="💬 评论"
+        style={{ marginTop: 5, width: "100%", borderRadius: 8 }}
+      >
         <Comment
           avatar={
             <Avatar
@@ -105,10 +122,11 @@ class MarkAera extends React.Component {
             />
           }
         />
-        {comments.length > 0 && <CommentList comments={comments} />}
+        {mark.length > 0 && <CommentList comments={mark} />}
       </Card>
     );
   }
 }
+
 
 export default MarkAera;
