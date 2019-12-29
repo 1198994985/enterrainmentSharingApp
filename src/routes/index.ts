@@ -2,31 +2,50 @@ import { RouteConfig } from "react-router-config";
 import BlankComponent, { test } from "./BlankComponent";
 import { Home, MusicDetail, MvPage } from "../pages";
 import { MusicCard, PlayList } from "./../component/";
-
-
-
-const routesConfig: RouteConfig[] = [
+import SuspenseComponent from "./suspend";
+import { MainView, Login } from "../containers/index.js";
+import React, { lazy, Suspense } from "react";
+import { ChatView } from "../containers/";
+import { Redirect } from "react-router-dom";
+// const ChatView = lazy(() => import("../containers/RightView"));
+export default [
   {
     component: BlankComponent,
     routes: [
       {
         path: "/",
-        component: Home,
-        exact: true,
-        routes: []
+        component: SuspenseComponent(Home),
+        exact: true
       },
       {
         path: "/song/:id",
-        component: MusicDetail,
-        routes: []
+        component: SuspenseComponent(MusicDetail)
       },
-      
+
       {
         path: "/mv/:id",
-        component: MvPage,
+        component: SuspenseComponent(MvPage)
+      },
+      {
+        path: "/login",
+        exact: true,
+        component: SuspenseComponent(Login)
+      },
+      {
+        path: "/register",
+        component: SuspenseComponent(MvPage),
         routes: []
+      },
+      {
+        path: "/main",
+        component: SuspenseComponent(MainView),
+        routes: [
+          {
+            path: "/main/chat",
+            component: SuspenseComponent(ChatView)
+          }
+        ]
       }
     ]
   }
 ];
-export default routesConfig;

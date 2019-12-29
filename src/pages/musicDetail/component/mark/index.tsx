@@ -47,13 +47,13 @@ interface ImarkProps {
 
 export interface markItem {
   id: string | number;
-  author:string;
-  content:string;
+  author: string;
+  content: string;
   datetime: string;
   avater: string;
 }
 
-class MarkAera extends React.PureComponent<> {
+class MarkAera extends React.PureComponent {
   state = {
     comments: [],
     submitting: false,
@@ -68,7 +68,8 @@ class MarkAera extends React.PureComponent<> {
     this.setState({
       submitting: true
     });
-
+    console.log("this.props.onAddComment", this.props.onAddComment);
+    this.props.onAddComment(this.state.value);
     setTimeout(() => {
       this.setState({
         submitting: false,

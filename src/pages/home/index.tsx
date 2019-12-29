@@ -12,7 +12,7 @@ import {
 } from "./component";
 import { PlayList } from "../../component/";
 import "./index.less";
-
+import {useSelector}from 'react-redux'
 interface IrmdList {
   id: number;
   name: string;
@@ -37,7 +37,9 @@ const Home: React.FC = () => {
   const [rankList, setRankList] = useState<IrankList[][]>();
   const [bannerList, setBannerList] = useState<IbannerListItem[]>();
   const history = useHistory();
-
+  //@ts-ignore
+  const idd = useSelector(state => state.privateChatsState)
+  console.log('idd', idd)
   useEffect(() => {
     (async () => {
       // TODO: PROMISE ALL

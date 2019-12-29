@@ -1,11 +1,12 @@
-import React,{useState,useEffect} from 'react';
-import { Input, Avatar, Popover } from "antd";
-import './index.less'
+import React, { useState, useEffect } from "react";
+import { Input, Avatar, Popover, Button } from "antd";
+import { useHistory } from 'react-router'
+import { useSelector, useStore} from "react-redux";
+
+import "./index.less";
 const { Search } = Input;
 
-interface Props {
-  
-}
+interface Props {}
 const HeaderSearch: React.FC<Props> = () => {
   return (
     <div className="header-search">
@@ -18,12 +19,38 @@ const HeaderSearch: React.FC<Props> = () => {
     </div>
   );
 };
-const content = (
-  <div>
-    <p>风</p>
-    <p>Content</p>
-  </div>
-);
+const AvaterMenu: React.FC = () => {
+  const history = useHistory()
+  // @ts-ignore
+  const userId = useSelector(state => state.privateChatsState.userId);
+  const store = useStore()
+  const handleChatCilck = () => {
+    console.log('userId', typeof  userId)
+    history.push('main/chat');
+  }
+  const handleExit = () => {
+    store.dispatch({
+      type: "SET_USERID",
+      data: undefined
+    });
+    localStorage.clear()
+  }
+  const handleLoginIn = () => {
+    history.push('/login')
+  };
+  if (userId) {
+    return (
+      <div>
+        <Button onClick={handleChatCilck}>消息</Button>
+        <Button onClick={handleExit}>退出</Button>
+      </div>
+    );
+  } else {
+    return <Button onClick={handleLoginIn}>登陆</Button>;
+  }
+    
+};
+
 const HomeHeader: React.FC<Props> = () => {
   return (
     <header className="header-home">
@@ -40,7 +67,7 @@ const HomeHeader: React.FC<Props> = () => {
             enterButton="搜 索"
           />
         </div>
-        <Popover content={content} placement="bottomRight">
+        <Popover content={<AvaterMenu />} placement="bottomRight">
           <Avatar
             size="large"
             alt="User"
@@ -50,6 +77,6 @@ const HomeHeader: React.FC<Props> = () => {
       </div>
     </header>
   );
-}
+};
 
 export default HomeHeader;

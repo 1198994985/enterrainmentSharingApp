@@ -1,15 +1,16 @@
 import axios from "axios";
 import { message } from "antd";
+import { storage } from "../untils/storage";
 
 axios.defaults.withCredentials = true; // 跨域
 axios.defaults.baseURL = "https://musicapi.leanapp.cn/";
-const baseURL = "https://musicapi.leanapp.cn/";
+const baseURL = "http://localhost:3003";
 // let instance = axios.create({
 //   baseURL: "https://music.163.com/",
 //   timeout: 2000,
 
 // });
-let whiteList = ["/login", "/register"];
+let whiteList = ["/main/", "/main/chat/"];
 
 const gainError = (status: number) => {
   let errMsg = "";
@@ -69,12 +70,14 @@ axios.interceptors.response.use(
 axios.interceptors.request.use(
   config => {
     // @ts-ignore
-    if (!whiteList.includes(config.url)) {
-      // const res = storage.getToken();
-      // if (res) {
-      //   console.log(res);
-      //   config.headers.Authorization = "Bearer " + storage.getToken();
-      // }
+    if (
+      config.url?.indexOf("login") !== -1 ||
+      config.url?.indexOf("user") !== -1
+    ) {
+      const res = storage.getToken();
+      if (res) {
+        config.headers.Authorization = "Bearer " + storage.getToken();
+      }
     }
     return config;
   },
@@ -291,3 +294,13 @@ export const rqMark = async (
     return undefined;
   }
 };
+
+export const tryLogin = (account: string | number, password: string | number) =>
+  request(baseURL + "/login", { account, password }, "POST");
+export const getMyInfo = () => request(baseURL + "/userinfo", {}, "GET");
+export const insertMark = (
+  theId: string | number,
+  from_id: string | number,
+  msg: string,
+  type: "0" | "1" | 1 | 0
+) => request(baseURL + "/markInfo", { theId, from_id, type, msg }, "POST");

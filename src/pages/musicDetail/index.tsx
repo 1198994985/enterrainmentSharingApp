@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { withRouter, useParams } from "react-router-dom";
+import { useHistory } from "react-router";
+
 import { Button, Rate } from "antd";
 import { Header, MarkAera } from "./component/";
 import { rqMusicDesc, rqMark } from "../../ajax/";
-
+import { insertMark } from "../../ajax/";
+import { useSelector } from "react-redux";
 import "./index.less";
+import { IntersectResult } from "../../rayTracing";
 
 interface Idetail {
   id: number;
@@ -14,14 +18,26 @@ interface Idetail {
   picUrl: string;
   publishTime: number;
 }
+interface Imark {
+  id: string | number;
+  author: string;
+  content: string;
+  datatime: string;
+  avater: string;
+}
 const MusicDetail: React.FC = () => {
   const [id, setId] = useState<string>();
   const [songDetail, setSongDetail] = useState<Idetail>();
   const [playerVisiable, setplayerVisiable] = useState(false);
   const [songUrl, setSongUrl] = useState<string>();
-  const [mark, setMark] = useState<[]>();
+  const [mark, setMark] = useState<Imark[]>();
   const params = useParams<{ id: string }>();
+  const history = useHistory();
+  // @ts-ignore
+  const userId = useSelector(state => state.privateChatsState.userId);
   useEffect(() => {
+    console.log("history", history.location.pathname);
+
     if (params) setId(params.id);
     (async () => {
       const data = await rqMusicDesc(params.id);
@@ -34,7 +50,7 @@ const MusicDetail: React.FC = () => {
       let a = document.getElementById("root");
       if (a) a.scrollIntoView({ block: "start", behavior: "auto" });
     }, 0);
-  }, [params]);
+  }, [history, params]);
   const handelShare = () => {
     if (songDetail) {
       const url = `http://service.weibo.com/share/share.php?appkey=&title=我正在听${songDetail?.name}&url=http://www.bobozuishuai.com.cn:8010/song/${id}`;
@@ -47,6 +63,40 @@ const MusicDetail: React.FC = () => {
       setSongUrl(`https://music.163.com/song/media/outer/url?id=${id}.mp3`);
     }
   };
+
+  const onAddComment = async (comment: string) => {
+    let path = history.location.pathname;
+    console.log("mark", mark);
+    if (userId && mark) {
+      let res;
+      if (path.indexOf("mv") !== -1) {
+        res = await insertMark(params.id, userId, comment, 1);
+      } else if (path.indexOf("song") !== -1) {
+        res = await insertMark(params.id, userId, comment, 0);
+      }
+      console.log('res.time', res.time)
+      if (res instanceof Object) {
+        let newMark = {
+          id: 1,
+          author: userId || 0,
+          content: comment,
+          datetime: res?.data?.time,
+          avatar:
+            "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+        };
+        if (Array.isArray(mark) && mark.length) {
+          // @ts-ignore
+          newMark.id = mark[0].id + 1;
+          // @ts-ignore
+          setMark([newMark, ...mark]);
+        } else {
+          // @ts-ignore
+          setMark([newMark]);
+        }
+      }
+    }
+  };
+
   return (
     <div className="music-page ">
       <Header />
@@ -112,7 +162,7 @@ Welcome welcome welcome to the
         </div>
         {
           //@ts-ignore
-          <MarkAera mark={mark || []} />
+          <MarkAera onAddComment={onAddComment} mark={mark || []} />
         }
       </div>
       {playerVisiable && (
