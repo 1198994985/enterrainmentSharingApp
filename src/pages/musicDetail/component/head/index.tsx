@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Input, Avatar, Popover } from "antd";
+import { AvaterMenu } from "../../../home/component";
 import "./index.less";
+import { Menu, Icon } from "antd";
+
+const { SubMenu } = Menu;
 const { Search } = Input;
 
-interface Props {}
-const HeaderSearch: React.FC<Props> = () => {
+
+const HeaderSearch: React.FC = () => {
   return (
     <div className="header-search">
       <Search
@@ -20,18 +24,63 @@ const HeaderSearch: React.FC<Props> = () => {
     </div>
   );
 };
-const content = (
-  <div>
-    <p>风</p>
-    <p>Content</p>
-  </div>
-);
-const HomeHeader: React.FC<Props> = () => {
+interface Iprops{
+  selected?:string
+}
+const HomeHeader: React.FC<Iprops> = ({ selected = "detail" }) => {
+  const [current, setCurrent] = useState(selected);
+  // @ts-ignore
+  const handleClick = e => {
+    console.log("click ", e);
+    // setCurrent(e.key);
+  };
   return (
     <header className="header-fixed">
       <div className="header-inner">
+        <img
+          src="http://localhost:3003/uploads/SuperLuckyBo.png"
+          draggable="false"
+          alt=""
+          className="logo"
+        />
+        <Menu
+          onClick={handleClick}
+          // @ts-ignore
+          selectedKeys={[current]}
+          mode="horizontal"
+        >
+          <Menu.Item key="home">
+            <a
+              href="http://localhost:3000"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon type="home" />
+              主页
+            </a>
+          </Menu.Item>
+
+          <Menu.Item key="detail">
+            <a
+              href={selected === "detail" ? undefined : "http://localhost:3000"}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              详情页
+            </a>
+          </Menu.Item>
+          <Menu.Item key="chat">
+            <a
+              href="http://localhost:3000/main/chat"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              消息
+            </a>
+          </Menu.Item>
+        </Menu>
         <HeaderSearch />
-        <Popover content={content} placement="bottomRight">
+        <Popover content={<AvaterMenu />} placement="bottomRight">
           <Avatar
             size="large"
             alt="User"

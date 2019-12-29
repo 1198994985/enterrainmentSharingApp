@@ -11,6 +11,7 @@ import { getMyInfo } from "../../ajax";
 import { storage } from "../../untils/storage";
 import store from "../../redux";
 import "./index.less";
+import HomeHeader from "../../pages/musicDetail/component/head/";
 function MainView(props) {
   const [isInit, setInit] = useState(false);
 
@@ -54,11 +55,14 @@ function MainView(props) {
   console.log("props.route.routes", props.route.routes);
   if (isInit) {
     return (
-      <div className="free-layout-wrapper">
-        <LeftNav />
-        {/* <Route path="/chat" exact component={ChatView} /> */}
-        {renderRoutes(props.route.routes)}
-      </div>
+      <>
+        <HomeHeader selected="chat" />
+        <div className="free-layout-wrapper chat-container">
+          <LeftNav />
+          {/* <Route path="/chat" exact component={ChatView} /> */}
+          {renderRoutes(props.route.routes)}
+        </div>
+      </>
     );
   }
   return null;

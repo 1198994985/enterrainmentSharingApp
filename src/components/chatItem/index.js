@@ -17,7 +17,7 @@ export function ChatItem({
     if ([2,'2'].includes(type)) {
       return (
         <p>
-          <img style={{width:100,height:100}} src={msg} alt="" />
+          <img style={{width:150,height:150}} src={msg} alt="" />
         </p>
       );
     } else if ([3, '3'].includes(type)) {

@@ -96,8 +96,6 @@ class MarkAera extends React.PureComponent {
   render() {
     const { comments, submitting, value } = this.state;
     const { mark } = this.props;
-    
-    console.log('mark', mark)
     return (
       // <div className="mark-aera  card-white">
 

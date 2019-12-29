@@ -8,11 +8,16 @@ import {
   Nav,
   PlayListHead,
   RankList,
-  VedioAera
+  VedioAera,
+  TempAera,
+  TempRankList
 } from "./component";
 import { PlayList } from "../../component/";
-import "./index.less";
+import "./temp.less";
 import { useSelector } from "react-redux";
+import { Card } from "antd";
+
+const { Meta } = Card;
 interface IrmdList {
   id: number;
   name: string;
@@ -32,7 +37,7 @@ interface IbannerListItem {
   url: string;
 }
 
-const Home: React.FC = () => {
+const Temp: React.FC = () => {
   const [rmdList, setRmdList] = useState<IrmdList[][]>();
   const [rankList, setRankList] = useState<IrankList[][]>();
   const [bannerList, setBannerList] = useState<IbannerListItem[]>();
@@ -54,7 +59,7 @@ const Home: React.FC = () => {
       setBannerList(bannerlist);
     })();
     return () => {};
-  }, []);
+   }, []);
 
   const handleBannerClick = useCallback(
     (item: IbannerListItem) => {
@@ -79,25 +84,25 @@ const Home: React.FC = () => {
               console.log("bannerList", bannerList);
               if (index == 0 || index == bannerList.length - 1) {
                 return (
-                    <img
-                      className="banner-img"
-                      src={item.picUrl + "?param=1600x622"}
-                      draggable="false"
-                      alt=""
-                      onClick={() => handleBannerClick(item)}
-                      key={index + item.id}
-                    />
+                  <img
+                    className="banner-img"
+                    src={item.picUrl + "?param=1600x622"}
+                    draggable="false"
+                    alt=""
+                    onClick={() => handleBannerClick(item)}
+                    key={index + item.id}
+                  />
                 );
               } else {
                 return (
-                    <img
-                      className="banner-img"
-                      src={item.picUrl + "?param=1600x622"}
-                      draggable="false"
-                      alt=""
-                      onClick={() => handleBannerClick(item)}
-                      key={item.id}
-                    />
+                  <img
+                    className="banner-img"
+                    src={item.picUrl + "?param=1600x622"}
+                    draggable="false"
+                    alt=""
+                    onClick={() => handleBannerClick(item)}
+                    key={item.id}
+                  />
                 );
               }
             })}
@@ -111,22 +116,17 @@ const Home: React.FC = () => {
           <PlayList imgUrlList={rmdList && rmdList[1]} />
         </Slider>
         <VedioAera />
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "space-around",
-            margin: "0 auto",
-            maxWidth: "1500px"
-          }}
-        >
-          <RankList rankList={rankList && rankList[0]} title="云音乐新歌榜" />
-          <RankList rankList={rankList && rankList[1]} title="网易原创歌曲榜" />
-          <RankList rankList={rankList && rankList[2]} title="云音乐飙升榜" />
+
+        <div className="rank-and-list">
+          <TempAera />
+          <TempRankList
+            rankList={rankList && rankList[2]}
+            title="云音乐飙升榜"
+          />
         </div>
       </div>
     </>
   );
 };
 
-export default withRouter(React.memo(Home));
+export default withRouter(React.memo(Temp));

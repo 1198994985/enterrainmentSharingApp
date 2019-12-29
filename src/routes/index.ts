@@ -1,7 +1,7 @@
 import { RouteConfig } from "react-router-config";
 import BlankComponent, { test } from "./BlankComponent";
-import { Home, MusicDetail, MvPage } from "../pages";
-import { MusicCard, PlayList } from "./../component/";
+import { Home, MusicDetail, MvPage, Temp, GamePage } from "../pages";
+import { MusicCard, PlayList ,} from "./../component/";
 import SuspenseComponent from "./suspend";
 import { MainView, Login } from "../containers/index.js";
 import React, { lazy, Suspense } from "react";
@@ -33,8 +33,14 @@ export default [
       },
       {
         path: "/register",
-        component: SuspenseComponent(MvPage),
+        component: SuspenseComponent(Temp),
         routes: []
+      },
+
+      {
+        path: "/game/:id",
+        exact: true,
+        component: SuspenseComponent(GamePage),
       },
       {
         path: "/main",

@@ -67,7 +67,7 @@ const MusicDetail: React.FC = () => {
   const onAddComment = async (comment: string) => {
     let path = history.location.pathname;
     console.log("mark", mark);
-    if (userId && mark) {
+    if (userId ) {
       let res;
       if (path.indexOf("mv") !== -1) {
         res = await insertMark(params.id, userId, comment, 1);
@@ -90,6 +90,7 @@ const MusicDetail: React.FC = () => {
           // @ts-ignore
           setMark([newMark, ...mark]);
         } else {
+          console.log('newMark', newMark)
           // @ts-ignore
           setMark([newMark]);
         }

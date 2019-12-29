@@ -7,26 +7,16 @@ import "./index.less";
 const { Search } = Input;
 
 interface Props {}
-const HeaderSearch: React.FC<Props> = () => {
-  return (
-    <div className="header-search">
-      <Search
-        placeholder="input search text"
-        size="large"
-        onSearch={value => console.log(value)}
-        enterButton="搜 索"
-      />
-    </div>
-  );
-};
-const AvaterMenu: React.FC = () => {
+
+export const AvaterMenu: React.FC = () => {
   const history = useHistory()
   // @ts-ignore
   const userId = useSelector(state => state.privateChatsState.userId);
   const store = useStore()
   const handleChatCilck = () => {
-    console.log('userId', typeof  userId)
-    history.push('main/chat');
+    console.log('userId', typeof userId)
+    // TODO: 修复bug
+    history.replace('main/chat');
   }
   const handleExit = () => {
     store.dispatch({
@@ -55,6 +45,11 @@ const HomeHeader: React.FC<Props> = () => {
   return (
     <header className="header-home">
       <div className="header-inner">
+        <img
+          src="http://localhost:3003/uploads/SuperLuckyBo.png"
+          draggable="false"
+          alt=""
+        />
         <div className="header-search">
           <Search
             placeholder="请输入想要搜索的音乐"
