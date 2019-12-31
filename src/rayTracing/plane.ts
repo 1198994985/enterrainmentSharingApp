@@ -46,6 +46,6 @@ CheckerMaterial.prototype.sample= function(ray, position, normal) {
     return Math.abs(
       (Math.floor(position.x * 0.1) + Math.floor(position.z * this.scale)) % 2
     ) < 1
-      ? Color.prototype.black
+      ? Color.prototype.white
       : Color.prototype.white;
   }

@@ -42,6 +42,8 @@ const Home: React.FC = () => {
   console.log("idd", idd);
   useEffect(() => {
     (async () => {
+      const bannerlist = await rqSliderImg();
+      setBannerList(bannerlist);
       // TODO: PROMISE ALL
       const rmdlist = await rqRmdSongList();
       const rmd = [rmdlist?.slice(0, 5), rmdlist?.slice(5, 10)];
@@ -50,8 +52,7 @@ const Home: React.FC = () => {
       const rankList2 = await rqTopList(2);
       const rankList3 = await rqTopList(4);
       setRankList([rankList, rankList2, rankList3]);
-      const bannerlist = await rqSliderImg();
-      setBannerList(bannerlist);
+      
     })();
     return () => {};
   }, []);
@@ -79,25 +80,25 @@ const Home: React.FC = () => {
               console.log("bannerList", bannerList);
               if (index == 0 || index == bannerList.length - 1) {
                 return (
-                    <img
-                      className="banner-img"
-                      src={item.picUrl + "?param=1600x622"}
-                      draggable="false"
-                      alt=""
-                      onClick={() => handleBannerClick(item)}
-                      key={index + item.id}
-                    />
+                  <img
+                    className="banner-img"
+                    src={item.picUrl + "?param=1600x622"}
+                    draggable="false"
+                    alt=""
+                    onClick={() => handleBannerClick(item)}
+                    key={index + item.id}
+                  />
                 );
               } else {
                 return (
-                    <img
-                      className="banner-img"
-                      src={item.picUrl + "?param=1600x622"}
-                      draggable="false"
-                      alt=""
-                      onClick={() => handleBannerClick(item)}
-                      key={item.id}
-                    />
+                  <img
+                    className="banner-img"
+                    src={item.picUrl + "?param=1600x622"}
+                    draggable="false"
+                    alt=""
+                    onClick={() => handleBannerClick(item)}
+                    key={item.id}
+                  />
                 );
               }
             })}
@@ -105,19 +106,21 @@ const Home: React.FC = () => {
       </div>
       <div className="home-container">
         <Nav />
-        <PlayListHead />
-        <Slider speed={700}>
-          <PlayList imgUrlList={rmdList && rmdList[0]} />
-          <PlayList imgUrlList={rmdList && rmdList[1]} />
-        </Slider>
+        <div style={{ background: "#F9F9F9" }}>
+          <PlayListHead />
+          <Slider speed={700}>
+            <PlayList imgUrlList={rmdList && rmdList[0]} />
+            <PlayList imgUrlList={rmdList && rmdList[1]} />
+          </Slider>
+        </div>
+
         <VedioAera />
         <div
           style={{
             width: "100%",
             display: "flex",
             justifyContent: "space-around",
-            margin: "0 auto",
-            maxWidth: "1500px"
+            background: "#FAFAFA"
           }}
         >
           <RankList rankList={rankList && rankList[0]} title="云音乐新歌榜" />

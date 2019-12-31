@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { PlayListHead, PlayListTitle, PlayListTab } from "../index";
 import { MusicCard } from "../../../../component/";
-import { rqMvList } from "../../../../ajax/";
+import { rqMvList, rqMvUrl } from "../../../../ajax/";
 import { withRouter } from "react-router-dom";
 import "./index.less";
 
@@ -46,7 +46,6 @@ const VedioList: React.FC<Props> = React.memo(props => {
                       name={item.author}
                       desc={item.name}
                     />
-
                   );
                 }
                 return null;
@@ -68,20 +67,31 @@ interface IvedioUrl {
 }
 const talName = ["mv", "内地", "港台", "欧美"];
 const VedioAera: React.FC<Props> = React.memo(() => {
-  const [VedioUrl, setVedioUrl] = useState<IvedioUrl[][]>();
+  const [vedioList, setvedioList] = useState<IvedioUrl[][]>();
   const [VedioUrlIndex, setVedioUrlIndex] = useState<number>(0);
+  const [mvUrl,setMvUrl] = useState()
   useEffect(() => {
     (async () => {
-      const data = await rqMvList(18);
-      setVedioUrl([data.slice(0, 6), data.slice(6, 12), data.slice(12, 18)]);
+      const data = await rqMvList(24);
+      setvedioList([
+        data.slice(0, 6),
+        data.slice(6, 12),
+        data.slice(12, 18),
+        data.slice(18, 24)
+      ]);
+      const mvUrl = await rqMvUrl(10904989);
+      
+        setMvUrl(mvUrl?.mvUrl["720"])
+
+      //10901117
     })();
   }, []);
 
   return (
-    <div>
+    <div className="home-mv-wrapper">
       <PlayListHead>
         {talName.map((item, index) => {
-          if (index < ((VedioUrl && VedioUrl.length) || 3)) {
+          if (index < ((vedioList && vedioList.length) || 3)) {
             return (
               <PlayListTab
                 name={item}
@@ -95,7 +105,10 @@ const VedioAera: React.FC<Props> = React.memo(() => {
           return null;
         })}
       </PlayListHead>
-      <VedioList vedioList={VedioUrl && VedioUrl[VedioUrlIndex]} />
+      <VedioList
+        vedioList={vedioList && vedioList[VedioUrlIndex]}
+        vedioUrl={mvUrl}
+      />
     </div>
   );
 });

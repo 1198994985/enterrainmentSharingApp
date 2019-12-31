@@ -55,9 +55,7 @@ const HomeHeader: React.FC<Props> = () => {
             placeholder="请输入想要搜索的音乐"
             size="large"
             onSearch={value => {
-              window.open(
-                `https://y.qq.com/portal/search.html#page=1&searchid=1&remoteplace=txt.yqq.top&t=song&w=${value}`
-              );
+              window.open(`https://music.163.com/#/search/m/?s=${value}&type=1`);
             }}
             enterButton="搜 索"
           />

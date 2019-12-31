@@ -2,13 +2,14 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { withRouter, useParams } from "react-router-dom";
 import { useHistory } from "react-router";
 
-import { Button, Rate } from "antd";
+import { Button, Rate, message } from "antd";
 import { Header, MarkAera } from "./component/";
 import { rqMusicDesc, rqMark } from "../../ajax/";
 import { insertMark } from "../../ajax/";
 import { useSelector } from "react-redux";
 import "./index.less";
 import { IntersectResult } from "../../rayTracing";
+import { DragSource } from "react-dnd";
 
 interface Idetail {
   id: number;
@@ -67,14 +68,14 @@ const MusicDetail: React.FC = () => {
   const onAddComment = async (comment: string) => {
     let path = history.location.pathname;
     console.log("mark", mark);
-    if (userId ) {
+    if (userId) {
       let res;
       if (path.indexOf("mv") !== -1) {
         res = await insertMark(params.id, userId, comment, 1);
       } else if (path.indexOf("song") !== -1) {
         res = await insertMark(params.id, userId, comment, 0);
       }
-      console.log('res.time', res.time)
+      console.log("res.time", res.time);
       if (res instanceof Object) {
         let newMark = {
           id: 1,
@@ -82,7 +83,7 @@ const MusicDetail: React.FC = () => {
           content: comment,
           datetime: res?.data?.time,
           avatar:
-            "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+            "https://tvax3.sinaimg.cn/crop.0.0.996.996.180/006N18DEly8g9fuv61xm0j30ro0ro40f.jpg?KID=imgbed,tva&Expires=1577102993&ssig=FJjqh7zXKG"
         };
         if (Array.isArray(mark) && mark.length) {
           // @ts-ignore
@@ -90,14 +91,22 @@ const MusicDetail: React.FC = () => {
           // @ts-ignore
           setMark([newMark, ...mark]);
         } else {
-          console.log('newMark', newMark)
+          console.log("newMark", newMark);
           // @ts-ignore
           setMark([newMark]);
         }
       }
+    } else {
+      message.info("登陆后可评论");
     }
   };
-
+  const handleShareFriend = () => {
+    if (songDetail) {
+      const content = `${songDetail.author},我正在看《${songDetail?.name}》@SuperLuckyBo,http://localhost:3000/song/${id}`;
+      const url = `http://localhost:3000/main/chat?content=${content}`;
+      window.open(url);
+    }
+  };
   return (
     <div className="music-page ">
       <Header />
@@ -119,6 +128,7 @@ const MusicDetail: React.FC = () => {
               <Button>❤ 收藏</Button>
               <Button>💬 评论</Button>
               <Button onClick={handelShare}>🔗 分享到微博</Button>
+              <Button onClick={handleShareFriend}>🔗 分享给好友</Button>
             </div>
           </section>
 
@@ -127,9 +137,9 @@ const MusicDetail: React.FC = () => {
         <div className="lyric card-white">
           <h1> 歌词</h1>
           <pre>
-            {`如果真的我想要 - 黄旭
+            {`${songDetail && songDetail.name} - ${songDetail?.author}
 
-词：黄旭
+词：${songDetail?.author}
 曲：Mai
 编曲：Mai
 和声：潘玮柏/何美延/SeanT肖恩恩/于嘉萌

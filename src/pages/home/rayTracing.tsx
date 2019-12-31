@@ -83,8 +83,9 @@ function rayTraceReflection(canvas, scene, camera, maxReflect) {
 interface Props {}
 export function run() {
   var plane = new Plane(new Vector3(0, 1, 0), 0);
-  var sphere2 = new Sphere(new Vector3(2, 9, -10), 4);
-  var sphere3 = new Sphere(new Vector3(16, 9, -10), 4);
+  var sphere2 = new Sphere(new Vector3(7, 9, -10), 10);
+  var sphere3 = new Sphere(new Vector3(30, 9, -10),10);
+var sphere4 = new Sphere(new Vector3(16, -250, -150), 225);
 
   plane.material = new CheckerMaterial(0.1, 0.5);
   sphere2.material = new PhongMaterial(
@@ -99,11 +100,17 @@ export function run() {
     19,
     0.3
   );
+    sphere4.material = new PhongMaterial(
+      new Color(1, 1, 1),
+      new Color(1.0, 1.0, 1.0),
+      19,
+      0.3
+    );
   rayTraceReflection(
     document.getElementById("renderCanvas"),
-    new Union([plane, sphere2, sphere3]),
+    new Union([sphere4, sphere2, sphere3]),
     new Camera(
-      new Vector3(10, 8, 15),
+      new Vector3(10, 2, 40),
       new Vector3(0, 0, -1),
       new Vector3(0, 1, 0),
       90

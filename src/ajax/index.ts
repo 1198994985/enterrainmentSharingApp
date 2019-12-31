@@ -286,7 +286,7 @@ export const rqMark = async (
                content: data.msg,
                datetime: data.time,
                avatar:
-                 "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                 "https://tvax3.sinaimg.cn/crop.0.0.996.996.180/006N18DEly8g9fuv61xm0j30ro0ro40f.jpg?KID=imgbed,tva&Expires=1577102993&ssig=FJjqh7zXKG"
              });
            }
            return result;

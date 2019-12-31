@@ -1,6 +1,12 @@
 import { RouteConfig } from "react-router-config";
 import BlankComponent, { test } from "./BlankComponent";
-import { Home, MusicDetail, MvPage, Temp, GamePage } from "../pages";
+import {
+  Home,
+  MusicDetail,
+  MvPage,
+  GamePage,
+  rayTracing
+} from "../pages";
 import { MusicCard, PlayList ,} from "./../component/";
 import SuspenseComponent from "./suspend";
 import { MainView, Login } from "../containers/index.js";
@@ -33,14 +39,14 @@ export default [
       },
       {
         path: "/register",
-        component: SuspenseComponent(Temp),
+        component: SuspenseComponent(rayTracing),
         routes: []
       },
 
       {
         path: "/game/:id",
         exact: true,
-        component: SuspenseComponent(GamePage),
+        component: SuspenseComponent(GamePage)
       },
       {
         path: "/main",

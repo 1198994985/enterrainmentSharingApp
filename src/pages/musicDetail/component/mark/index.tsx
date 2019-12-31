@@ -73,19 +73,9 @@ class MarkAera extends React.PureComponent {
     setTimeout(() => {
       this.setState({
         submitting: false,
-        value: "",
-        comments: [
-          {
-            author: "xxx",
-            avatar:
-              "https://tvax3.sinaimg.cn/crop.0.0.996.996.180/006N18DEly8g9fuv61xm0j30ro0ro40f.jpg?KID=imgbed,tva&Expires=1577102993&ssig=FJjqh7zXKG",
-            content: <p>{this.state.value}</p>,
-            datetime: moment().fromNow()
-          },
-          ...this.state.comments
-        ]
+
       });
-    }, 100);
+    }, 300);
   };
   handleChange = e => {
     this.setState({
@@ -108,7 +98,7 @@ class MarkAera extends React.PureComponent {
         <Comment
           avatar={
             <Avatar
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+              src="https://tvax3.sinaimg.cn/crop.0.0.996.996.180/006N18DEly8g9fuv61xm0j30ro0ro40f.jpg?KID=imgbed,tva&Expires=1577102993&ssig=FJjqh7zXKG"
               alt=""
             />
           }

@@ -34,13 +34,11 @@ function PrivateChat({
   const [videoVisible, setVideoVisible] = useState(false);
   const [upLoadVisible, setUpLoadVisible] = useState(false);
   const [sharingText, setSharingText] = useState(undefined);
-   const history = useHistory();
-   useEffect(() => {
-     console.log("history.pathname", history.location.search);
-   }, [history, history.pathname]);
-  
-  
-  
+  const history = useHistory();
+  useEffect(() => {
+    console.log("history.pathname", history.location.search);
+  }, [history, history.pathname]);
+
   const sendClick = async (inputMsg = "") => {
     if (inputMsg === "") return;
     let msg = await sendPrivateMsg(inputMsg, nowChatId, myId);
@@ -126,9 +124,11 @@ function PrivateChat({
       if (!ext) return;
       ext = ext.toLowerCase();
       if (["png", "jpg", "jpeg", "bmp", "gif", "webp", "ai"].includes(ext)) {
-        sendPic(info.file.response.fileUrl,2);
+        sendPic(info.file.response.fileUrl, 2);
       } else if (["doc", "pdf"].includes(ext)) {
         sendPic(info.file.response.fileUrl, 1);
+      } else if (["mp4", "pdf"].includes(ext)) {
+        sendPic(info.file.response.fileUrl, 8);
       } else {
         sendPic(info.file.response.fileUrl, 3);
       }
@@ -140,7 +140,6 @@ function PrivateChat({
       message.error(`${info.file.name} 文件上传失败`);
     }
   };
-  
 
   return (
     <div className="free-chat-right">
